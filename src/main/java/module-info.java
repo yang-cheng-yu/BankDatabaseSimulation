@@ -4,6 +4,7 @@ module org.example.bankdatabasesimulation {
 
     requires com.dlsc.formsfx;
     requires org.kordamp.bootstrapfx.core;
+    requires java.sql;
 
     opens org.example.bankdatabasesimulation to javafx.fxml;
     exports org.example.bankdatabasesimulation;

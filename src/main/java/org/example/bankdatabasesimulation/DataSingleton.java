@@ -3,11 +3,17 @@ package org.example.bankdatabasesimulation;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 public class DataSingleton {
+    private HashMap<Integer, Manager> managers;
+    private HashMap<Integer, Customer> customers;
+    private HashMap<Integer, Account> accounts;
+    private HashMap<Integer, Transaction> transaction;
+
     public static void main(String[] args) {
 
-        String url = "jdbc:sqlite:src/main/resources/database/testing.db"; // path to your DB file
+        String url = "jdbc:sqlite:src/main/resources/database/data.db"; // path to your DB file
 
         try (Connection conn = DriverManager.getConnection(url)) {
             Class.forName("org.sqlite.JDBC");

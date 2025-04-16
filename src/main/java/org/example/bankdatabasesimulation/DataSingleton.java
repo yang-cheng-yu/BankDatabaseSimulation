@@ -22,6 +22,9 @@ public class DataSingleton {
         }
     }
 
-    
+    public static void createTable(){
+
+    }
+
 
 }

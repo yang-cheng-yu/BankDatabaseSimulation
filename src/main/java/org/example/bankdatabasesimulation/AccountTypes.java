@@ -1,5 +1,5 @@
 package org.example.bankdatabasesimulation;
 
 public enum AccountTypes {
-    CREDIT, DEBIT, INVESTMENT
+    ALL, CREDIT, CHEQUING, SAVINGS, BUSINESS, INVESTMENT
 }

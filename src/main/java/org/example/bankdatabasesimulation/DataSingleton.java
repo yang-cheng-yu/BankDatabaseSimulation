@@ -1,15 +1,16 @@
 package org.example.bankdatabasesimulation;
 
+import javafx.collections.ObservableList;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.HashMap;
 
 public class DataSingleton {
-    private HashMap<Integer, Manager> managers;
-    private HashMap<Integer, Customer> customers;
-    private HashMap<Integer, Account> accounts;
-    private HashMap<Integer, Transaction> transaction;
+    private ObservableList<Manager> managers;
+    private ObservableList<Customer> customers;
+    private ObservableList<Account> accounts;
+    private ObservableList<Transaction> transaction;
 
     public static void main(String[] args) {
 
@@ -28,9 +29,6 @@ public class DataSingleton {
         }
     }
 
-    public static void createTable(){
-
-    }
-
+    
 
 }

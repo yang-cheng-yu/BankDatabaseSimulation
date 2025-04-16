@@ -9,5 +9,11 @@ public class User {
     protected String phoneNum;
     protected String DOB;
     protected String address;
+    protected userType userType;
+
+    public int getUserId() {
+        return userId;
+    }
 }
+
 

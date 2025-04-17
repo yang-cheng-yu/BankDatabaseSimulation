@@ -86,7 +86,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                org.example.bankdatabasesimulation/org.example.bankdatabasesimulation.HelloApplication
+                                org.example.bankdatabasesimulation/org.example.bankdatabasesimulation.Application
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

@@ -17,14 +17,9 @@ public class DatabaseHelper {
     }
 
     // ===== CONNECT METHOD =====
-    public static Connection connect() {
-        try {
-            connection = DriverManager.getConnection(DB_URL);
-            System.out.println("successfully connected");
-        } catch (SQLException e) {
-            System.out.println("Connection failed: " + e.getMessage());
-        }
-        return connection;
+    public DatabaseHelper(){
+        connection = DataSingleton.getConnection();
+        createUsersTable();
     }
 
 
@@ -275,36 +270,36 @@ public class DatabaseHelper {
         }
     }
 
-    public static void insertAccount(int typeId, double balance) {
-        User current = DataSingleton.getInstance().getCurrentUser();
-        if (current == null) {
-            System.err.println("No user is logged in. Cannot create account.");
-            return;
-        }
-
-        int userId = current.getUserId();
-        Status status = computeStatus(typeId, balance);
-
-        String sql = """
-        INSERT INTO accounts(userId, typeId, balance, status)
-        VALUES(?, ?, ?, ?);
-        """;
-
-        try (Connection conn = DataSingleton.getInstance().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, userId);
-            ps.setInt(2, typeId);
-            ps.setDouble(3, balance);
-            ps.setString(4, status.name());
-
-            ps.executeUpdate();
-            System.out.println("Account created for user #" + userId
-                    + " with status " + status);
-        } catch (SQLException e) {
-            System.err.println("insertAccount failed: " + e.getMessage());
-        }
-    }
+//    public static void insertAccount(int typeId, double balance) {
+//        User current = DataSingleton.getInstance().getCurrentUser();
+//        if (current == null) {
+//            System.err.println("No user is logged in. Cannot create account.");
+//            return;
+//        }
+//
+//        int userId = current.getUserId();
+//        Status status = computeStatus(typeId, balance);
+//
+//        String sql = """
+//        INSERT INTO accounts(userId, typeId, balance, status)
+//        VALUES(?, ?, ?, ?);
+//        """;
+//
+//        try (Connection conn = DataSingleton.getInstance().getConnection();
+//             PreparedStatement ps = conn.prepareStatement(sql)) {
+//
+//            ps.setInt(1, userId);
+//            ps.setInt(2, typeId);
+//            ps.setDouble(3, balance);
+//            ps.setString(4, status.name());
+//
+//            ps.executeUpdate();
+//            System.out.println("Account created for user #" + userId
+//                    + " with status " + status);
+//        } catch (SQLException e) {
+//            System.err.println("insertAccount failed: " + e.getMessage());
+//        }
+//    }
 }
 
 

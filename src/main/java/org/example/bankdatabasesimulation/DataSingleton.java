@@ -12,38 +12,25 @@ public class DataSingleton {
     private ObservableList<Account> accounts;
     private ObservableList<Transaction> transaction;
     private static DataSingleton instance;
-    private Connection connection;
+    private static Connection connection;
     private User currentUser;
 
     private DataSingleton() {
-        connection = DatabaseHelper.connect();
     }
 
-    public static synchronized DataSingleton getInstance() {
-        if (instance == null) instance = new DataSingleton();
-        return instance;
-    }
 
-    public Connection getConnection() {
+    public static Connection getConnection() {
+        if (connection == null) {
+            try {
+                connection = DriverManager.getConnection("jdbc:sqlite:src/main/resources/database/database.db");
+                System.out.println("successfully connected");
+            } catch (SQLException e) {
+                System.out.println("Connection failed: " + e.getMessage());
+            }
+        }
         return connection;
     }
 
-    public User getCurrentUser() {
-        return currentUser;
-    }
 
-    public void setCurrentUser(User user) {
-        this.currentUser = user;
-    }
-
-    public static void main(String[] args) {
-
-        
-        DatabaseHelper.connect();
-        DatabaseHelper.createUsersTable();
-        DatabaseHelper.createCustomersTable();
-        DatabaseHelper.insertCustomer("123","fname","lname","email","123","today","123 street", userType.CUSTOMER);
-        DatabaseHelper.printAllUsers();
-    }
 
 }

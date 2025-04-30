@@ -35,7 +35,6 @@ public class DatabaseHelper {
                 phoneNum TEXT NOT NULL,
                 DOB DATE NOT NULL,
                 Address TEXT NOT NULL
-                userType TEXT NOT NULL
                 );
                 """;
         execute(sql, "Users table created");
@@ -92,7 +91,7 @@ public class DatabaseHelper {
     }
 
     public static void insertCustomer(String accountPass, String fname, String lname,
-                                      String email, String phonenum, String DOB, String address, userType userTypes){
+                                      String email, String phonenum, String DOB, String address){
         String sql = """
                 INSERT INTO users(accountPass,fname,lname,email,phonenum,DOB,address,userType) VALUES(?,?,?,?,?,?,?,?);
                 """;
@@ -105,7 +104,6 @@ public class DatabaseHelper {
             stmt.setString(5,phonenum);
             stmt.setString(6,DOB);
             stmt.setString(7,address);
-            stmt.setObject(8,userTypes);
             stmt.executeUpdate();
             System.out.println("Customer Inserted");
         } catch (SQLException e) {
@@ -128,34 +126,31 @@ public class DatabaseHelper {
             stmt.setString(6,DOB);
             stmt.setString(7,address);
             stmt.executeUpdate();
+
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                int userId = rs.getInt(1);
+                insertManagerHelper(userId);
+            }
             System.out.println("Manager Inserted");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    /*public static void insertAccount(int typeID, double balance){
-
-
+    private static void insertManagerHelper(int userId){
         String sql = """
-                INSERT INTO users(accountPass,fname,lname,email,phonenum,DOB,address) VALUES(?,?,?,?,?,?,?);
+                INSERT INTO managers(userId) VALUES(?);
                 """;
+
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setString(1,accountPass);
-            stmt.setString(2,fname);
-            stmt.setString(3,lname);
-            stmt.setString(4,email);
-            stmt.setString(5,phonenum);
-            stmt.setString(6,DOB);
-            stmt.setString(7,address);
+            stmt.setInt(1,userId);
             stmt.executeUpdate();
-            System.out.println("Manager Inserted");
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException e){
+            System.out.println("Insert Manager Helpter error: "+e.getMessage());
         }
-    }*/
-
+    }
 
 
 
@@ -263,19 +258,17 @@ public class DatabaseHelper {
         return false;
     }
 
-    private static Status computeStatus(int typeId, double balance) {
-        // suppose you have an enum or constants for typeId:
-        // 1 = CREDIT, 2 = DEBIT, 3 = INVESTMENT
+    private static Status computeStatus(AccountType accountType, double balance) {
         if (balance < 0) {
             return Status.IN_DEBT;
-        } else if (typeId == AccountTypes.INVESTMENT.ordinal()) {
+        } else if (accountType.equals(AccountType.INVESTMENT)) {
             return Status.FROZEN;
         } else {
             return Status.ACTIVE;
         }
     }
 
-    public static void insertAccount(int typeId, double balance) {
+    public static void insertAccount(AccountType accountType, double balance) {
         User current = DataSingleton.getInstance().getCurrentUser();
         if (current == null) {
             System.err.println("No user is logged in. Cannot create account.");
@@ -283,7 +276,7 @@ public class DatabaseHelper {
         }
 
         int userId = current.getUserId();
-        Status status = computeStatus(typeId, balance);
+        Status status = computeStatus(accountType, balance);
 
         String sql = """
         INSERT INTO accounts(userId, typeId, balance, status)
@@ -293,7 +286,7 @@ public class DatabaseHelper {
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setInt(1, userId);
-            ps.setInt(2, typeId);
+            ps.setObject(2, accountType);
             ps.setDouble(3, balance);
             ps.setString(4, status.name());
 

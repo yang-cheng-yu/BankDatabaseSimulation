@@ -105,11 +105,33 @@ public class DatabaseHelper {
             stmt.setString(6,DOB);
             stmt.setString(7,address);
             stmt.executeUpdate();
+
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                int userId = rs.getInt(1);
+                insertManagerHelper(userId);
+            }
+
             System.out.println("Customer Inserted");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
+
+    private static void insertCustomerHelper(int userId){
+        String sql = """
+                INSERT INTO customers(userId) VALUES(?);
+                """;
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1,userId);
+            stmt.executeUpdate();
+        } catch (SQLException e){
+            System.out.println("Insert Customer Helper error: "+e.getMessage());
+        }
+    }
+
 
     public static void insertManager(String accountPass, String fname, String lname,
                                       String email, String phonenum, String DOB, String address){
@@ -152,7 +174,9 @@ public class DatabaseHelper {
         }
     }
 
-
+    //DELETE THESE TRIGGERS BEFORE YOU WANT TO RUN THE PROGRAM
+    //I IMPLEMENTED A WAY TO ADD INTO CUSTOMER AND MANAGER TABLES WITHOUT
+    //THE NEED OF TRIGGERS, INSTEAD I USED HELPER METHODS
 
     public static void createCustomerTrigger(){
         String sql = """

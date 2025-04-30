@@ -67,7 +67,7 @@ public class DatabaseHelper {
                 CREATE TABLE IF NOT EXISTS accounts(
                 accountId INTEGER PRIMARY KEY AUTOINCREMENT,
                 userId INTEGER NOT NULL,
-                typeId INTEGER NOT NULL,
+                accountTypeId INTEGER NOT NULL,
                 balance DECIMAL(10,2) NOT NULL,
                 status INTEGER NOT NULL,
                 FOREIGN KEY (userId) REFERENCES users(userId)
@@ -109,7 +109,7 @@ public class DatabaseHelper {
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
                 int userId = rs.getInt(1);
-                insertManagerHelper(userId);
+                insertCustomerHelper(userId);
             }
 
             System.out.println("Customer Inserted");
@@ -299,18 +299,26 @@ public class DatabaseHelper {
             return;
         }
 
+        int accountTypeId;
+        switch (accountType.getAccTypeId()) {
+            case 1 -> accountTypeId = 1; //DEBIT
+            case 2 -> accountTypeId = 2; //CREDIT
+            case 3 -> accountTypeId = 3; //INVESTMENT
+            default -> accountTypeId = 0; //ERROR/NULL
+        }
+
         int userId = current.getUserId();
         Status status = computeStatus(accountType, balance);
 
         String sql = """
-        INSERT INTO accounts(userId, typeId, balance, status)
+        INSERT INTO accounts(userId, accountTypeId, balance, status)
         VALUES(?, ?, ?, ?);
         """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setInt(1, userId);
-            ps.setObject(2, accountType);
+            ps.setInt(2, accountTypeId);
             ps.setDouble(3, balance);
             ps.setString(4, status.name());
 

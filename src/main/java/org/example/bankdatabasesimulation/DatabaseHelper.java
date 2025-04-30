@@ -290,8 +290,7 @@ public class DatabaseHelper {
         VALUES(?, ?, ?, ?);
         """;
 
-        try (Connection conn = DataSingleton.getInstance().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setInt(1, userId);
             ps.setInt(2, typeId);

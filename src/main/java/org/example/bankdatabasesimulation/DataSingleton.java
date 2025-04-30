@@ -31,6 +31,17 @@ public class DataSingleton {
         return connection;
     }
 
+    public static synchronized DataSingleton getInstance() {
+        if (instance == null)
+            instance = new DataSingleton();
+        return instance;
+    }
 
+    public User getCurrentUser() {
+        return currentUser;
+    }
 
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
 }

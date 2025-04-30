@@ -14,4 +14,8 @@ public class Manager extends User {
         this.address = address;
         this.managerId = managerId;
     }
+
+    public Manager(int userId, String fName, String lName, String email, String phoneNum, String dob, String address) {
+        super();
+    }
 }

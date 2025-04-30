@@ -219,45 +219,50 @@ public class DatabaseHelper {
     }
 
 
-   /* public static boolean login(String email, String password) {
-        String sql = "SELECT userId, fname, lname, email, phonenum, DOB, address , address, userType "
-                + "FROM users WHERE email = ? AND accountPass = ?";
-
-        try (PreparedStatement ps = DataSingleton
-                .getInstance()
-                .getConnection()
-                .prepareStatement(sql)) {
+    public static boolean login(String email, String password) {
+        String sql = "SELECT * FROM users WHERE email = ? AND accountPass = ? LIMIT 1";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setString(1, email);
             ps.setString(2, password);
 
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    // build your User (or Customer/Manager) object
-                    int userId      = rs.getInt("userId");
-                    String fn       = rs.getString("fname");
-                    String ln       = rs.getString("lname");
-                    String em = rs.getString("email");
-                    String pn = rs.getString("phonenum");
-                    String DOB = rs.getString("DOB");
-                    String ad = rs.getString("address");
-                    String userType = rs.getString("userType");
-                    User user;
-                    if ("CUSTOMER".equals(userType)) {
-                        user = new Customer(userId, fn, ln, em, pn, DOB, ad, userType, );
-                    } else {
-                        user = new Manager(userId, fn, ln, );
+                if (rs.next()){
+                    int userId = rs.getInt("userId");
+                    String fName = rs.getString("fName");
+                    String lName = rs.getString("lName");
+                    String phoneNum = rs.getString("phoneNum");
+                    String dob = rs.getString("DOB");
+                    String address = rs.getString("Address");
+
+                    String sql2 = "SELECT * FROM customers WHERE userId = ? LIMIT 1";
+                    try (PreparedStatement ps2 = connection.prepareStatement(sql2)) {
+                        ps2.setInt(1, userId);
+
+                        try (ResultSet rs2 = ps2.executeQuery()) {
+                            if (rs2.next()) {
+                                // It's a customer
+                                Customer customer = new Customer(userId, fName, lName, email, phoneNum, dob, address);
+                                DataSingleton.getInstance().setCurrentUser(customer);
+                                return true;
+                            } else {
+                                // Otherwise, it's a manager
+                                Manager manager = new Manager(userId, fName, lName, email, phoneNum, dob, address);
+                                DataSingleton.getInstance().setCurrentUser(manager);
+                                return true;
+                            }
+                        }
                     }
-                    DataSingleton.getInstance().setCurrentUser(user);
-                    return true;
                 }
             }
+
         } catch (SQLException e) {
             System.err.println("Login error: " + e.getMessage());
+            return false;
         }
         return false;
     }
-    */
+
     private static Status computeStatus(int typeId, double balance) {
         // suppose you have an enum or constants for typeId:
         // 1 = CREDIT, 2 = DEBIT, 3 = INVESTMENT
@@ -270,36 +275,36 @@ public class DatabaseHelper {
         }
     }
 
-//    public static void insertAccount(int typeId, double balance) {
-//        User current = DataSingleton.getInstance().getCurrentUser();
-//        if (current == null) {
-//            System.err.println("No user is logged in. Cannot create account.");
-//            return;
-//        }
-//
-//        int userId = current.getUserId();
-//        Status status = computeStatus(typeId, balance);
-//
-//        String sql = """
-//        INSERT INTO accounts(userId, typeId, balance, status)
-//        VALUES(?, ?, ?, ?);
-//        """;
-//
-//        try (Connection conn = DataSingleton.getInstance().getConnection();
-//             PreparedStatement ps = conn.prepareStatement(sql)) {
-//
-//            ps.setInt(1, userId);
-//            ps.setInt(2, typeId);
-//            ps.setDouble(3, balance);
-//            ps.setString(4, status.name());
-//
-//            ps.executeUpdate();
-//            System.out.println("Account created for user #" + userId
-//                    + " with status " + status);
-//        } catch (SQLException e) {
-//            System.err.println("insertAccount failed: " + e.getMessage());
-//        }
-//    }
+    public static void insertAccount(int typeId, double balance) {
+        User current = DataSingleton.getInstance().getCurrentUser();
+        if (current == null) {
+            System.err.println("No user is logged in. Cannot create account.");
+            return;
+        }
+
+        int userId = current.getUserId();
+        Status status = computeStatus(typeId, balance);
+
+        String sql = """
+        INSERT INTO accounts(userId, typeId, balance, status)
+        VALUES(?, ?, ?, ?);
+        """;
+
+        try (Connection conn = DataSingleton.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ps.setInt(2, typeId);
+            ps.setDouble(3, balance);
+            ps.setString(4, status.name());
+
+            ps.executeUpdate();
+            System.out.println("Account created for user #" + userId
+                    + " with status " + status);
+        } catch (SQLException e) {
+            System.err.println("insertAccount failed: " + e.getMessage());
+        }
+    }
 }
 
 

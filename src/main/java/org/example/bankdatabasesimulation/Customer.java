@@ -14,4 +14,8 @@ public class Customer extends User {
         this.address = address;
         this.customerId = customerId;
     }
+
+    public Customer(int userId, String fName, String lName, String email, String phoneNum, String dob, String address) {
+        super();
+    }
 }

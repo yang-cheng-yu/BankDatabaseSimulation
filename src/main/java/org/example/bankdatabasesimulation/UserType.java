@@ -1,5 +1,5 @@
 package org.example.bankdatabasesimulation;
 
-public enum userType {
+public enum UserType {
     CUSTOMER,MANAGER
 }

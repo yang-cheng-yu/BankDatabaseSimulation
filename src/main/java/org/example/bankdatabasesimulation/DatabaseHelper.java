@@ -386,8 +386,54 @@ public class DatabaseHelper {
         }
     }
 
-    
+    public static void deposit(AccountType accountType, double money){
+        User current = DataSingleton.getInstance().getCurrentUser();
+        if (current == null) {
+            System.err.println("No user is logged in. Cannot create account.");
+            return;
+        }
+        int userId = current.getUserId();
+        int accountTypeInt = convertAccountType(accountType);
+        String sql = """
+                SELECT balance FROM accounts
+                        WHERE userId = ? AND accountTypeId = ?;
+                """;
+
+        try (PreparedStatement selectStmt = connection.prepareStatement(sql)) {
+            selectStmt.setInt(1, userId);
+            selectStmt.setInt(2, accountTypeInt);
+
+            ResultSet rs = selectStmt.executeQuery();
+            if (rs.next()) {
+                double currentBalance = rs.getDouble("balance");
+
+                double newBalance = currentBalance + money;
+
+
+                String updateSql = """
+                UPDATE accounts SET balance = ?
+                WHERE userId = ? AND accountTypeId = ?;
+                """;
+
+                try (PreparedStatement updateStmt = connection.prepareStatement(updateSql)) {
+                    updateStmt.setDouble(1, newBalance);
+                    updateStmt.setInt(2, userId);
+                    updateStmt.setInt(3, accountTypeInt);
+
+                    int rowsAffected = updateStmt.executeUpdate();
+                    if (rowsAffected > 0) {
+                        System.out.println("Deposit successful. New balance: " + newBalance);
+                    } else {
+                        System.err.println("Deposit failed. No account found.");
+                    }
+                }
+
+            } else {
+                System.err.println("Account not found for user and type.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Deposit failed: " + e.getMessage());
+        }
+    }
+
 }
-
-
-

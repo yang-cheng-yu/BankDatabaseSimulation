@@ -299,13 +299,7 @@ public class DatabaseHelper {
             return;
         }
 
-        int accountTypeId;
-        switch (accountType.getAccTypeId()) {
-            case 1 -> accountTypeId = 1; //DEBIT
-            case 2 -> accountTypeId = 2; //CREDIT
-            case 3 -> accountTypeId = 3; //INVESTMENT
-            default -> accountTypeId = 0; //ERROR/NULL
-        }
+        int accountTypeId = convertAccountType(accountType);
 
         int userId = current.getUserId();
         Status status = computeStatus(accountType, balance);
@@ -329,6 +323,70 @@ public class DatabaseHelper {
             System.err.println("insertAccount failed: " + e.getMessage());
         }
     }
+
+    private static int convertAccountType(AccountType accountType){
+        int accountTypeId;
+        switch (accountType.getAccTypeId()) {
+            case 1 -> accountTypeId = 1; //DEBIT
+            case 2 -> accountTypeId = 2; //CREDIT
+            case 3 -> accountTypeId = 3; //INVESTMENT
+            default -> accountTypeId = 0; //ERROR/NULL
+        }
+        return accountTypeId;
+    }
+
+
+    public static void withdraw(AccountType accountType, double money){
+        User current = DataSingleton.getInstance().getCurrentUser();
+        if (current == null) {
+            System.err.println("No user is logged in. Cannot create account.");
+            return;
+        }
+        int userId = current.getUserId();
+        int accountTypeInt = convertAccountType(accountType);
+        String sql = """
+                SELECT balance FROM accounts
+                        WHERE userId = ? AND accountTypeId = ?;
+                """;
+
+        try (PreparedStatement selectStmt = connection.prepareStatement(sql)) {
+            selectStmt.setInt(1, userId);
+            selectStmt.setInt(2, accountTypeInt);
+
+            ResultSet rs = selectStmt.executeQuery();
+            if (rs.next()) {
+                double currentBalance = rs.getDouble("balance");
+
+                double newBalance = currentBalance - money;
+
+
+                String updateSql = """
+                UPDATE accounts SET balance = ?
+                WHERE userId = ? AND accountTypeId = ?;
+                """;
+
+                try (PreparedStatement updateStmt = connection.prepareStatement(updateSql)) {
+                    updateStmt.setDouble(1, newBalance);
+                    updateStmt.setInt(2, userId);
+                    updateStmt.setInt(3, accountTypeInt);
+
+                    int rowsAffected = updateStmt.executeUpdate();
+                    if (rowsAffected > 0) {
+                        System.out.println("Withdrawal successful. New balance: " + newBalance);
+                    } else {
+                        System.err.println("Withdrawal failed. No account found.");
+                    }
+                }
+
+            } else {
+                System.err.println("Account not found for user and type.");
+            }
+        } catch (SQLException e) {
+            System.err.println("withdraw failed: " + e.getMessage());
+        }
+    }
+
+    
 }
 
 

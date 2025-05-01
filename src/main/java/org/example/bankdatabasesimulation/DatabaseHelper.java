@@ -446,5 +446,62 @@ public class DatabaseHelper {
         }
     }
 
+    public static void transfer(AccountType accountType, double money, String email, AccountType receivingAccountType) {
+        money = Math.abs(money);
+        withdraw(accountType,money);
+        sendMoney(money,email,receivingAccountType);
+    }
+    private static void sendMoney(double money, String email, AccountType receivingAccountType) {
+        String sql = """
+                SELECT userId FROM users WHERE email = ?;
+                """;
+        try (PreparedStatement select = connection.prepareStatement(sql)) {
+            select.setString(1,email);
 
+            ResultSet rs = select.executeQuery();
+            if (rs.next()) {
+                int userId = rs.getInt("userId");
+
+                String sql2 = """
+                        SELECT accountId , balance FROM account WHERE userId = ? AND AccountTypeId = ?;
+                        """;
+                try (PreparedStatement select2 = connection.prepareStatement(sql2)){
+                    select2.setInt(1,userId);
+                    select2.setInt(2,receivingAccountType.getAccTypeId());
+
+                    ResultSet result = select2.executeQuery();
+                    if (result.next()) {
+                        double balance = result.getDouble("balance");
+                        int accountId = result.getInt("accountId");
+
+                        balance += money;
+
+                        String sql3 = """
+                                UPDATE accounts SET balance = ?
+                                WHERE userId = ? AND accountTypeId = ?;
+                                """;
+                        try (PreparedStatement select3 = connection.prepareStatement(sql3)){
+                            select3.setDouble(1,balance);
+                            select3.setInt(2,userId);
+                            select3.setInt(3,receivingAccountType.getAccTypeId());
+                            select3.executeUpdate();
+
+                            createTransaction(accountId,money,"Deposit");
+                            
+                            int rowsAffected = select3.executeUpdate();
+                            if (rowsAffected > 0) {
+                                System.out.println("Money sent Successfuly");
+                            } else {
+                                System.err.println("Transaction failed");
+                            }
+                        }
+                    }
+                }
+
+            }
+        } catch (SQLException e) {
+            System.err.println("error: " +e.getMessage());
+        }
+
+    }
 }

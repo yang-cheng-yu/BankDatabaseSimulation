@@ -299,7 +299,7 @@ public class DatabaseHelper {
             return;
         }
 
-        int accountTypeId = convertAccountType(accountType);
+        int accountTypeId = accountType.getAccTypeId();
 
         int userId = current.getUserId();
         Status status = computeStatus(accountType, balance);
@@ -324,18 +324,6 @@ public class DatabaseHelper {
         }
     }
 
-    private static int convertAccountType(AccountType accountType){
-        int accountTypeId;
-        switch (accountType.getAccTypeId()) {
-            case 1 -> accountTypeId = 1; //DEBIT
-            case 2 -> accountTypeId = 2; //CREDIT
-            case 3 -> accountTypeId = 3; //INVESTMENT
-            default -> accountTypeId = 0; //ERROR/NULL
-        }
-        return accountTypeId;
-    }
-
-
     public static void withdraw(AccountType accountType, double money){
         User current = DataSingleton.getInstance().getCurrentUser();
         if (current == null) {
@@ -343,7 +331,7 @@ public class DatabaseHelper {
             return;
         }
         int userId = current.getUserId();
-        int accountTypeInt = convertAccountType(accountType);
+        int accountTypeInt = accountType.getAccTypeId();
         String sql = """
                 SELECT balance FROM accounts
                         WHERE userId = ? AND accountTypeId = ?;
@@ -393,7 +381,7 @@ public class DatabaseHelper {
             return;
         }
         int userId = current.getUserId();
-        int accountTypeInt = convertAccountType(accountType);
+        int accountTypeInt = accountType.getAccTypeId();
         String sql = """
                 SELECT balance FROM accounts
                         WHERE userId = ? AND accountTypeId = ?;

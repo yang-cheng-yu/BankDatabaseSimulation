@@ -1,14 +1,15 @@
 package org.example.bankdatabasesimulation;
 
+import javafx.beans.Observable;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
+import javafx.scene.control.ComboBox;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ApplicationController {
-    @FXML
-    private Label welcomeText;
-
-    @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
+    public void init() {
+        
     }
 }

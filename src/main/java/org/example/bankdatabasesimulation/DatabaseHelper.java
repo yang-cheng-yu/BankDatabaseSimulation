@@ -325,6 +325,7 @@ public class DatabaseHelper {
     }
 
     public static void withdraw(AccountType accountType, double money){
+
         User current = DataSingleton.getInstance().getCurrentUser();
         if (current == null) {
             System.err.println("No user is logged in. Cannot create account.");
@@ -333,7 +334,7 @@ public class DatabaseHelper {
         int userId = current.getUserId();
         int accountTypeInt = accountType.getAccTypeId();
         String sql = """
-                SELECT balance FROM accounts
+                SELECT balance, accountId FROM accounts
                         WHERE userId = ? AND accountTypeId = ?;
                 """;
 
@@ -344,9 +345,13 @@ public class DatabaseHelper {
             ResultSet rs = selectStmt.executeQuery();
             if (rs.next()) {
                 double currentBalance = rs.getDouble("balance");
+                int accountId = rs.getInt("accountId");
 
+
+                money = Math.abs(money);
                 double newBalance = currentBalance - money;
-
+                money *= -1;
+                createTransaction(accountId,money,"Withdraw");
 
                 String updateSql = """
                 UPDATE accounts SET balance = ?
@@ -365,9 +370,9 @@ public class DatabaseHelper {
                         System.err.println("Withdrawal failed. No account found.");
                     }
                 }
-
             } else {
                 System.err.println("Account not found for user and type.");
+
             }
         } catch (SQLException e) {
             System.err.println("withdraw failed: " + e.getMessage());
@@ -383,7 +388,7 @@ public class DatabaseHelper {
         int userId = current.getUserId();
         int accountTypeInt = accountType.getAccTypeId();
         String sql = """
-                SELECT balance FROM accounts
+                SELECT balance, accountId FROM accounts
                         WHERE userId = ? AND accountTypeId = ?;
                 """;
 
@@ -394,9 +399,11 @@ public class DatabaseHelper {
             ResultSet rs = selectStmt.executeQuery();
             if (rs.next()) {
                 double currentBalance = rs.getDouble("balance");
+                int accountId = rs.getInt("accountId");
 
+                money = Math.abs(money);
                 double newBalance = currentBalance + money;
-
+                createTransaction(accountId,money,"Deposit");
 
                 String updateSql = """
                 UPDATE accounts SET balance = ?
@@ -423,5 +430,21 @@ public class DatabaseHelper {
             System.err.println("Deposit failed: " + e.getMessage());
         }
     }
+    private static void createTransaction(int accountId, double amount, String description) {
+        String sql2 = """
+                        INSERT INTO transactions(accountId, tranAmount, tranDescription, tranDate) VALUES(?,?,?,?);
+                        """;
 
+        try (PreparedStatement ps = connection.prepareStatement(sql2)) {
+            ps.setInt(1,accountId);
+            ps.setDouble(2,amount);
+            ps.setString(3,description);
+            ps.setDate(4,new Date(System.currentTimeMillis()));
+        }
+        catch (SQLException e) {
+            System.err.println("Error with Inserting Transaction" + e.getMessage());
+        }
+    }
+
+    
 }

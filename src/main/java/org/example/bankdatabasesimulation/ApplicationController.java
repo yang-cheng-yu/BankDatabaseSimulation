@@ -10,6 +10,6 @@ import java.util.List;
 
 public class ApplicationController {
     public void init() {
-        
+
     }
 }

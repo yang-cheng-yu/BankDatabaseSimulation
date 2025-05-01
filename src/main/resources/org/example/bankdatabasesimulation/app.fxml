@@ -18,7 +18,7 @@
          <children>
             <HBox alignment="TOP_RIGHT" prefHeight="50.0" prefWidth="200.0">
                <children>
-                  <Button mnemonicParsing="false" text="Create Account">
+                  <Button mnemonicParsing="false" text="Create Customer">
                      <HBox.margin>
                         <Insets left="20.0" right="20.0" />
                      </HBox.margin>
@@ -46,7 +46,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
                <children>
-                  <Label text="Account Number: " />
+                  <Label text="Email: " />
                   <TextField />
                </children>
             </HBox>

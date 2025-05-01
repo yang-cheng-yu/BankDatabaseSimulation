@@ -18,6 +18,9 @@ public class DataSingleton {
     private DataSingleton() {
     }
 
+    public void loadLists(){
+
+    }
 
     public static Connection getConnection() {
         if (connection == null) {

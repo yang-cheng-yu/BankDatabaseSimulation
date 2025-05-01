@@ -1,5 +1,7 @@
 package org.example.bankdatabasesimulation;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseHelper {
     private static final String DB_URL = "jdbc:sqlite:src/main/resources/database/database.db";
@@ -207,35 +209,74 @@ public class DatabaseHelper {
 
 
 
-    public static void printAllUsers()
+    public static List<User> getAllUsers()
     {
+        List<User> users = new ArrayList<>();
         String sql="SELECT * FROM users";
-        StringBuilder builder=new StringBuilder();
-        //StringBuilder is a class used to build (or append) strings efficiently
-
         try{
             Statement stmt=connection.createStatement();
             ResultSet rs=stmt.executeQuery(sql);
             while(rs.next())
             {
-                String accountpass=rs.getString("accountPass");
-                String fname=rs.getString("fname");
-                String lname=rs.getString("lname");
-                String email=rs.getString("email");
-                String phonenum=rs.getString("phonenum");
-                String DOB=rs.getString("DOB");
-                String address=rs.getString("address");
-                builder.append(String.format("accountpass: %s, fName: %s, lname: %s," +
-                        " email: %s, phoneNumber: %s, DOB: %s, Address: %s",
-                        accountpass,fname,lname,email,phonenum,DOB,address));
-                System.out.println(builder);
+                users.add(new User(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getString(8)
+                ));
             }
         }
         catch(SQLException e)
         {
             System.out.println(e.getMessage());
         }
+        return users;
     }
+
+    public static List<Transaction> getAllTransactions()
+    {
+        User current = DataSingleton.getInstance().getCurrentUser();
+        List<Transaction> transactions = new ArrayList<>();
+
+        String sql="SELECT accountId FROM accounts WHERE UserId = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1,current.getUserId());
+            ResultSet rs = ps.executeQuery();
+            int accountId1 = rs.getInt("accountId");
+            int accountId2 = rs.getInt("accountId");
+            int accountId3 = rs.getInt("accountId");
+
+            String sql2= """
+                    SELECT * FROM transactions WHERE accountId = ? OR ? OR ?;
+                    """;
+            try (PreparedStatement ps2 = connection.prepareStatement(sql2)) {
+                ps2.setInt(1,accountId1);
+                ps2.setInt(2,accountId2);
+                ps2.setInt(3,accountId3);
+
+                ResultSet result = ps2.executeQuery();
+                while(rs.next())
+                {
+                    transactions.add(new Transaction(
+                            rs.getInt(1),
+                            rs.getInt(2),
+                            rs.getDouble(3),
+                            rs.getString(4),
+                            rs.getDate(5)));
+                }
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
+        return transactions;
+    }
+
 
 
     public static boolean login(String email, String password) {
@@ -487,7 +528,7 @@ public class DatabaseHelper {
                             select3.executeUpdate();
 
                             createTransaction(accountId,money,"Deposit");
-                            
+
                             int rowsAffected = select3.executeUpdate();
                             if (rowsAffected > 0) {
                                 System.out.println("Money sent Successfuly");
@@ -502,6 +543,5 @@ public class DatabaseHelper {
         } catch (SQLException e) {
             System.err.println("error: " +e.getMessage());
         }
-
     }
 }

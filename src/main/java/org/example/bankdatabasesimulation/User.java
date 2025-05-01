@@ -10,6 +10,16 @@ public class User {
     protected String DOB;
     protected String address;
 
+    public User(int userId, String accountPass, String fName, String lName, String email, String phoneNum, String DOB, String address) {
+        this.userId = userId;
+        this.accountPass = accountPass;
+        this.fName = fName;
+        this.lName = lName;
+        this.email = email;
+        this.phoneNum = phoneNum;
+        this.DOB = DOB;
+        this.address = address;
+    }
 
     public int getUserId() {
         return userId;

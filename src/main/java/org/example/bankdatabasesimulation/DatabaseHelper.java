@@ -237,6 +237,63 @@ public class DatabaseHelper {
         return users;
     }
 
+    public static List<User> getAllCustomers(){
+        List<User> customers = new ArrayList<>();
+
+        String sql = """
+                SELECT * FROM users WHERE userId IN (SELECT userId
+                FROM Customers);
+                """;
+        try (PreparedStatement ps = connection.prepareStatement(sql)){
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                customers.add(new User(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getString(8)
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return customers;
+    }
+
+    public static List<User> getAllManagers(){
+        List<User> managers = new ArrayList<>();
+
+        String sql = """
+                SELECT * FROM users WHERE userId IN (SELECT userId
+                FROM Managers);
+                """;
+        try (PreparedStatement ps = connection.prepareStatement(sql)){
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                managers.add(new User(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getString(8)
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return managers;
+    }
+
+
     public static List<Transaction> getAllTransactions()
     {
         User current = DataSingleton.getInstance().getCurrentUser();
@@ -538,10 +595,10 @@ public class DatabaseHelper {
                         }
                     }
                 }
-
             }
         } catch (SQLException e) {
             System.err.println("error: " +e.getMessage());
         }
     }
+
 }

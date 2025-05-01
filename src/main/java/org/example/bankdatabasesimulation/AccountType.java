@@ -1,13 +1,13 @@
 package org.example.bankdatabasesimulation;
 
 public class AccountType {
-    private int AccTypeId;
-    private String AccTypeDescription;
+    private int accTypeId;
+    private String accTypeDescription;
     private double interestRate;
 
     private AccountType(int accTypeId, String accTypeDescription, double interestRate) {
-        AccTypeId = accTypeId;
-        AccTypeDescription = accTypeDescription;
+        this.accTypeId = accTypeId;
+        this.accTypeDescription = accTypeDescription;
         this.interestRate = interestRate;
     }
 
@@ -16,11 +16,11 @@ public class AccountType {
     public static final AccountType INVESTMENT = new AccountType(3,"Investment Account",0.8);
 
     public int getAccTypeId() {
-        return AccTypeId;
+        return accTypeId;
     }
 
     public String getAccTypeDescription() {
-        return AccTypeDescription;
+        return accTypeDescription;
     }
 
     public double getInterestRate() {

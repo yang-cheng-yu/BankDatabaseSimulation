@@ -16,7 +16,7 @@ public class DatabaseHelper {
         }
     }
 
-    // ===== CONNECT METHOD =====
+    // ===== INITIALIZE METHOD =====
     public DatabaseHelper(){
         connection = DataSingleton.getConnection();
         createUsersTable();

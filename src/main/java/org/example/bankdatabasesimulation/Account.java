@@ -14,5 +14,4 @@ public class Account {
         this.balance = balance;
         this.status = status;
     }
-
 }

@@ -206,7 +206,50 @@ public class DatabaseHelper {
         execute(sql,"TRG_MANAGER_USER_ADD Trigger created");
     }
 
+    public static List<Account> getAllAccounts() {
+        User current = DataSingleton.getInstance().getCurrentUser();
+        int id = current.userId;
+        return getAllAccounts(id);
+    }
 
+    public static List<Account> getAllAccounts(int id){
+        List<Account> accounts = new ArrayList<>();
+        String sql = """
+                SELECT * FROM accounts WHERE userId = ?
+                """;
+        try (PreparedStatement ps = connection.prepareStatement(sql)){
+            ps.setInt(1,id);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int type = rs.getInt(3);
+                AccountType testing = switch (type) {
+                    case 1 -> AccountType.DEBIT;
+                    case 2 -> AccountType.CREDIT;
+                    case 3 -> AccountType.INVESTMENT;
+                    default -> null;
+                };
+                int status = rs.getInt(5);
+                Status test = switch (status) {
+                    case 0 -> Status.ACTIVE;
+                    case 1 -> Status.FROZEN;
+                    case 2 -> Status.IN_DEBT;
+                    default -> null;
+                };
+                accounts.add(new Account(
+                        rs.getInt(1),
+                        rs.getInt(2),
+                        testing,
+                        rs.getDouble(4),
+                        test
+                ));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return accounts;
+    }
 
 
     public static List<User> getAllUsers()
@@ -292,16 +335,19 @@ public class DatabaseHelper {
         }
         return managers;
     }
-
-
-    public static List<Transaction> getAllTransactions()
-    {
+    public static List<Transaction> getAllTransactions(){
         User current = DataSingleton.getInstance().getCurrentUser();
+        int id = current.userId;
+        return getAllTransactions(id);
+    }
+
+    public static List<Transaction> getAllTransactions(int id)
+    {
         List<Transaction> transactions = new ArrayList<>();
 
         String sql="SELECT accountId FROM accounts WHERE UserId = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1,current.getUserId());
+            ps.setInt(1,id);
             ResultSet rs = ps.executeQuery();
             int accountId1 = rs.getInt("accountId");
             int accountId2 = rs.getInt("accountId");
@@ -380,13 +426,13 @@ public class DatabaseHelper {
         return false;
     }
 
-    private static Status computeStatus(AccountType accountType, double balance) {
+    private static int computeStatus(AccountType accountType, double balance) {
         if (balance < 0) {
-            return Status.IN_DEBT;
+            return 2;
         } else if (accountType.equals(AccountType.INVESTMENT)) {
-            return Status.FROZEN;
+            return 1;
         } else {
-            return Status.ACTIVE;
+            return 0;
         }
     }
 
@@ -400,7 +446,7 @@ public class DatabaseHelper {
         int accountTypeId = accountType.getAccTypeId();
 
         int userId = current.getUserId();
-        Status status = computeStatus(accountType, balance);
+        int status = computeStatus(accountType, balance);
 
         String sql = """
         INSERT INTO accounts(userId, accountTypeId, balance, status)
@@ -412,7 +458,7 @@ public class DatabaseHelper {
             ps.setInt(1, userId);
             ps.setInt(2, accountTypeId);
             ps.setDouble(3, balance);
-            ps.setString(4, status.name());
+            ps.setInt(4, status);
 
             ps.executeUpdate();
             System.out.println("Account created for user #" + userId
@@ -432,7 +478,7 @@ public class DatabaseHelper {
         int userId = current.getUserId();
         int accountTypeInt = accountType.getAccTypeId();
         String sql = """
-                SELECT balance, accountId FROM accounts
+                SELECT status , balance, accountId FROM accounts
                         WHERE userId = ? AND accountTypeId = ?;
                 """;
 
@@ -444,6 +490,12 @@ public class DatabaseHelper {
             if (rs.next()) {
                 double currentBalance = rs.getDouble("balance");
                 int accountId = rs.getInt("accountId");
+                int status = rs.getInt("status");
+
+                if (status == 1){
+                    System.err.println("can't deposit from frozen account");
+                    return;
+                }
 
 
                 money = Math.abs(money);
@@ -600,5 +652,19 @@ public class DatabaseHelper {
             System.err.println("error: " +e.getMessage());
         }
     }
+    public static void freezeAccount(int id){
+        String sql = """
+                UPDATE accounts SET status = ?
+                WHERE accountId = ?
+                """;
 
+        try (PreparedStatement update = connection.prepareStatement(sql)) {
+            update.setInt(1,1);
+            update.setInt(2,id);
+            update.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -7,8 +7,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DataSingleton {
-    private ObservableList<Manager> managers;
-    private ObservableList<Customer> customers;
+    private ObservableList<User> users;
     private ObservableList<Account> accounts;
     private ObservableList<Transaction> transaction;
     private static DataSingleton instance;

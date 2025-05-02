@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -10,17 +11,9 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane prefHeight="619.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.bankdatabasesimulation.ManagerController">
+<AnchorPane prefHeight="619.0" prefWidth="937.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.bankdatabasesimulation.ManagerController">
    <children>
-      <HBox alignment="CENTER" layoutX="226.0" prefHeight="81.0" prefWidth="148.0">
-         <children>
-            <Label text="Manager">
-               <font>
-                  <Font size="30.0" />
-               </font>
-            </Label>
-         </children>
-      </HBox>
+      <HBox alignment="CENTER" layoutX="226.0" prefHeight="81.0" prefWidth="148.0" />
       <HBox layoutX="14.0" layoutY="344.0" prefHeight="258.0" prefWidth="574.0">
          <children>
             <TableView prefHeight="258.0" prefWidth="606.0">
@@ -31,16 +24,71 @@
             </TableView>
          </children>
       </HBox>
-      <Button layoutX="14.0" layoutY="88.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="119.0" text="Display All Users" />
-      <Button layoutX="14.0" layoutY="139.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="148.0" text="Display All Customers" />
-      <Button layoutX="14.0" layoutY="193.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="148.0" text="Display all Managers" />
-      <Button layoutX="14.0" layoutY="297.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="163.0" text="Display Your  Transactions" />
+      <Button id="displayAllUsersButton" layoutX="14.0" layoutY="24.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="119.0" text="Display All Users" />
+      <Button id="displayAllCustomerButton" layoutX="14.0" layoutY="65.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="148.0" text="Display All Customers" />
+      <Button id="displayAllManagersButton" layoutX="14.0" layoutY="109.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="148.0" text="Display all Managers" />
+      <Button id="displayYourTransactionsButton" layoutX="14.0" layoutY="297.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="163.0" text="Display Your  Transactions" />
       <TextField layoutX="404.0" layoutY="94.0" prefHeight="25.0" prefWidth="182.0" />
-      <Label layoutX="337.0" layoutY="94.0" text="user ID:">
+      <Label id="userIdLabel" layoutX="337.0" layoutY="94.0" text="User ID:">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Button layoutX="338.0" layoutY="127.0" mnemonicParsing="false" text="Display Transactions" />
+      <Button id="displayTransactionButton" layoutX="462.0" layoutY="127.0" mnemonicParsing="false" text="Display Transactions" />
+      <TextField layoutX="404.0" layoutY="176.0" prefHeight="25.0" prefWidth="182.0" />
+      <Label id="AccountIdLabel" layoutX="309.0" layoutY="176.0" text="Account ID:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Button id="freezeAccountButton" layoutX="488.0" layoutY="212.0" mnemonicParsing="false" text="Freeze Account" />
+      <Button id="displayAccountsButton" layoutX="351.0" layoutY="127.0" mnemonicParsing="false" text="Display Accounts" />
+      <Button id="displayButton" layoutX="742.0" layoutY="200.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Display" />
+      <TextField layoutX="741.0" layoutY="127.0" />
+      <TextField layoutX="741.0" layoutY="164.0" />
+      <Label layoutX="694.0" layoutY="127.0" text="Min:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="692.0" layoutY="164.0" text="Max:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label id="accountBalanceRangeLabel" layoutX="669.0" layoutY="94.0" text="Filter Accounts by Balance Range">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Button id="displayYourAccountsButton" layoutX="187.0" layoutY="297.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="163.0" text="Display Your  Accounts" />
+      <Label id="createAccountLabel" layoutX="615.0" layoutY="344.0" text="Create Your Own accounts">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <TextField layoutX="615.0" layoutY="461.0" />
+      <Label id="accountTypeLabel" layoutX="614.0" layoutY="375.0" text="Account Type:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <RadioButton id="debitRadioButton" layoutX="613.0" layoutY="407.0" mnemonicParsing="false" text="Debit" />
+      <RadioButton id="creditRadioButton" layoutX="690.0" layoutY="407.0" mnemonicParsing="false" text="Credit" />
+      <RadioButton id="investmentRadioButton" layoutX="757.0" layoutY="407.0" mnemonicParsing="false" text="Investment" />
+      <Label id="initialBalanceLabel" layoutX="613.0" layoutY="429.0" text="Initial Balance:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Button id="createAccountButton" layoutX="615.0" layoutY="499.0" mnemonicParsing="false" text="Create Accouint" />
+      <Label layoutX="450.0" layoutY="20.0" text="Manager">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <Button id="sortAccountsByBalanceButton" layoutX="14.0" layoutY="158.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="163.0" text="Sort Accounts By Balance" />
+      <Button id="displayOnlyActiveAccountsButton" layoutX="14.0" layoutY="253.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="173.0" text="Display only Active Accounts" />
+      <Button id="sortUsersByNameButton" layoutX="14.0" layoutY="206.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="163.0" text="Sort Users by Name" />
    </children>
 </AnchorPane>

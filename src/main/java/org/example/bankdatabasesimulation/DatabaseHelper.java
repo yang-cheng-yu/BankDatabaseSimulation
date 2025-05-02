@@ -445,6 +445,23 @@ public class DatabaseHelper {
 
         int accountTypeId = accountType.getAccTypeId();
 
+        String sql2 = """
+                SELECT * FROM accounts WHERE userId = ? AND accountTypeId = ?
+                """;
+        try (PreparedStatement select = connection.prepareStatement(sql2)){
+            select.setInt(1,current.userId);
+            select.setInt(2,accountTypeId);
+
+            ResultSet result = select.executeQuery();
+
+            if (result.next()) {
+                System.err.println("Already have an account of that type");
+                return;
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         int userId = current.getUserId();
         int status = computeStatus(accountType, balance);
 
@@ -500,18 +517,20 @@ public class DatabaseHelper {
 
                 money = Math.abs(money);
                 double newBalance = currentBalance - money;
+                int newStatus = computeStatus(accountType,newBalance);
                 money *= -1;
                 createTransaction(accountId,money,"Withdraw");
 
                 String updateSql = """
-                UPDATE accounts SET balance = ?
+                UPDATE accounts SET balance = ?, status = ?
                 WHERE userId = ? AND accountTypeId = ?;
                 """;
 
                 try (PreparedStatement updateStmt = connection.prepareStatement(updateSql)) {
                     updateStmt.setDouble(1, newBalance);
-                    updateStmt.setInt(2, userId);
-                    updateStmt.setInt(3, accountTypeInt);
+                    updateStmt.setInt(2,newStatus);
+                    updateStmt.setInt(3, userId);
+                    updateStmt.setInt(4, accountTypeInt);
 
                     int rowsAffected = updateStmt.executeUpdate();
                     if (rowsAffected > 0) {
@@ -553,17 +572,19 @@ public class DatabaseHelper {
 
                 money = Math.abs(money);
                 double newBalance = currentBalance + money;
+                int newStatus = computeStatus(accountType,newBalance);
                 createTransaction(accountId,money,"Deposit");
 
                 String updateSql = """
-                UPDATE accounts SET balance = ?
+                UPDATE accounts SET balance = ?, status = ?
                 WHERE userId = ? AND accountTypeId = ?;
                 """;
 
                 try (PreparedStatement updateStmt = connection.prepareStatement(updateSql)) {
                     updateStmt.setDouble(1, newBalance);
-                    updateStmt.setInt(2, userId);
-                    updateStmt.setInt(3, accountTypeInt);
+                    updateStmt.setInt(2,newStatus);
+                    updateStmt.setInt(3, userId);
+                    updateStmt.setInt(4, accountTypeInt);
 
                     int rowsAffected = updateStmt.executeUpdate();
                     if (rowsAffected > 0) {
@@ -666,5 +687,18 @@ public class DatabaseHelper {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+    public static ArrayList<InterestObject> viewInterest(Account account) {
+
+        ArrayList<InterestObject> interestList = new ArrayList<>();
+
+        double interest = account.getAccountType().getInterestRate();
+        double balance = account.getBalance();
+
+        for (int i = 1; i <= 10; i++){
+            balance += balance * interest;
+            interestList.add(new InterestObject(i,balance));
+        }
+        return interestList;
     }
 }

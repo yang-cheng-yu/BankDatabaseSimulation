@@ -14,4 +14,12 @@ public class Account {
         this.balance = balance;
         this.status = status;
     }
+
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
 }

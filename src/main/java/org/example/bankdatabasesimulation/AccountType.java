@@ -27,4 +27,12 @@ public class AccountType {
         return interestRate;
     }
 
+    @Override
+    public String toString() {
+        return "AccountType{" +
+                "accTypeId=" + accTypeId +
+                ", accTypeDescription='" + accTypeDescription + '\'' +
+                ", interestRate=" + interestRate +
+                '}';
+    }
 }

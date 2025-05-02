@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -40,27 +41,6 @@ public class CustomerSelectController implements Initializable {
         typeList.add(AccountType.INVESTMENT);
         accountTypeComboBox.setItems(FXCollections.observableArrayList(typeList));
 
-        accountListBox.setOnMouseClicked(mouseEvent -> {
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("customer-client.fxml"));
-                Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-                Stage stage = new Stage();
-                stage.setScene(scene);
-                stage.show();
-                Stage window = (Stage) createAccountButton.getScene().getWindow();
-                window.close();
-            }
-            catch (IOException e) {
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Critical Error");
-                alert.setContentText("The application will now exit");
-
-                alert.showAndWait().ifPresent(response -> {
-                    Platform.exit();
-                });
-            }
-        });
     }
 
     private void refreshAccounts() {
@@ -74,5 +54,28 @@ public class CustomerSelectController implements Initializable {
         AccountType type = accountTypeComboBox.getValue();
         DatabaseHelper.insertAccount(type, 0);
         refreshAccounts();
+    }
+
+    @FXML
+    void loadAccount(MouseEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("customer-client.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.show();
+            Stage window = (Stage) createAccountButton.getScene().getWindow();
+            window.close();
+        }
+        catch (IOException e) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Critical Error");
+            alert.setContentText("The application will now exit");
+
+            alert.showAndWait().ifPresent(response -> {
+                Platform.exit();
+            });
+        }
     }
 }

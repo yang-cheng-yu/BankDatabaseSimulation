@@ -14,6 +14,7 @@ public class DataSingleton {
     private static DataSingleton instance;
     private static Connection connection;
     private User currentUser;
+    private Account currentAccount;
 
     private DataSingleton() {
     }

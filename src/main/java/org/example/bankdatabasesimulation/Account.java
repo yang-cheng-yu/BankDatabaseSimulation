@@ -15,6 +15,14 @@ public class Account {
         this.status = status;
     }
 
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
     public AccountType getAccountType() {
         return accountType;
     }
@@ -22,4 +30,9 @@ public class Account {
     public double getBalance() {
         return balance;
     }
+
+    public Status getStatus() {
+        return status;
+    }
+
 }

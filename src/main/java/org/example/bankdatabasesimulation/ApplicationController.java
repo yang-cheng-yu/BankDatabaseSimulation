@@ -1,15 +1,26 @@
 package org.example.bankdatabasesimulation;
 
-import javafx.beans.Observable;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-
-import java.util.ArrayList;
-import java.util.List;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 
 public class ApplicationController {
-    public void init() {
+
+    @FXML
+    private TextField emailBox;
+
+    @FXML
+    private PasswordField passwordBox;
+
+    @FXML
+    void createCustomer(MouseEvent event) {
 
     }
+
+    @FXML
+    void login(MouseEvent event) {
+
+    }
+
 }

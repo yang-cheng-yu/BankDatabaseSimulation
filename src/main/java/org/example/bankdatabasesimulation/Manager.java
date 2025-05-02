@@ -1,9 +1,11 @@
 package org.example.bankdatabasesimulation;
 
+import java.sql.Date;
+
 public class Manager extends User {
     private int managerId;
 
-    public Manager(int userId, String accountPass, String fName, String lName, String email, String phoneNum, String DOB, String address, int managerId) {
+    public Manager(int userId, String accountPass, String fName, String lName, String email, String phoneNum, Date DOB, String address, int managerId) {
         this.userId = userId;
         this.accountPass = accountPass;
         this.fName = fName;

@@ -85,7 +85,7 @@ public class DatabaseHelper {
                 accountId INTEGER NOT NULL,
                 tranAmount DECIMAL(10,2) NOT NULL,
                 tranDescription TEXT NOT NULL,
-                tranDate DATE NOT NULL
+                tranDate DATE NOT NULL,
                 FOREIGN KEY (accountId) REFERENCES accounts(accountId)
                 );
                 """;
@@ -93,9 +93,9 @@ public class DatabaseHelper {
     }
 
     public static void insertCustomer(String accountPass, String fname, String lname,
-                                      String email, String phonenum, String DOB, String address){
+                                      String email, String phonenum, long DOB, String address){
         String sql = """
-                INSERT INTO users(accountPass,fname,lname,email,phonenum,DOB,address,userType) VALUES(?,?,?,?,?,?,?,?);
+                INSERT INTO users(accountPass,fname,lname,email,phonenum,DOB,address) VALUES(?,?,?,?,?,?,?);
                 """;
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
@@ -104,7 +104,7 @@ public class DatabaseHelper {
             stmt.setString(3,lname);
             stmt.setString(4,email);
             stmt.setString(5,phonenum);
-            stmt.setString(6,DOB);
+            stmt.setDate(6,new Date(DOB));
             stmt.setString(7,address);
             stmt.executeUpdate();
 
@@ -180,28 +180,16 @@ public class DatabaseHelper {
     //I IMPLEMENTED A WAY TO ADD INTO CUSTOMER AND MANAGER TABLES WITHOUT
     //THE NEED OF TRIGGERS, INSTEAD I USED HELPER METHODS
 
-    public static void createCustomerTrigger(){
+    public static void deleteCustomerTrigger(){
         String sql = """
-                CREATE TRIGGER TRG_CUS_USER_ADD
-                AFTER INSERT ON users
-                WHEN NEW.userType = 'CUSTOMER'
-                BEGIN
-                    INSERT INTO customers(userId)
-                    VALUES (NEW.userId);
-                END;
+                DROP TRIGGER TRG_CUS_USER_ADD
                 """;
         execute(sql,"TRG_CUS_USER_ADD Trigger created");
     }
 
-    public static void createManagerTrigger(){
+    public static void deleteManagerTrigger(){
         String sql = """
-                CREATE TRIGGER TRG_MANAGER_USER_ADD
-                AFTER INSERT ON users
-                WHEN NEW.userType = 'MANAGER'
-                BEGIN
-                    INSERT INTO managers(userId)
-                    VALUES (NEW.userId);
-                END;
+                DROP TRIGGER TRG_MANAGER_USER_ADD
                 """;
         execute(sql,"TRG_MANAGER_USER_ADD Trigger created");
     }
@@ -268,7 +256,7 @@ public class DatabaseHelper {
                         rs.getString(4),
                         rs.getString(5),
                         rs.getString(6),
-                        rs.getString(7),
+                        rs.getDate(7),
                         rs.getString(8)
                 ));
             }
@@ -298,7 +286,7 @@ public class DatabaseHelper {
                         rs.getString(4),
                         rs.getString(5),
                         rs.getString(6),
-                        rs.getString(7),
+                        rs.getDate(7),
                         rs.getString(8)
                 ));
             }
@@ -326,7 +314,7 @@ public class DatabaseHelper {
                         rs.getString(4),
                         rs.getString(5),
                         rs.getString(6),
-                        rs.getString(7),
+                        rs.getDate(7),
                         rs.getString(8)
                 ));
             }

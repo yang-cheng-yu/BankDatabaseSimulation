@@ -1,5 +1,7 @@
 package org.example.bankdatabasesimulation;
 
+import java.sql.Date;
+
 public class User {
     protected int userId;
     protected String accountPass;
@@ -7,10 +9,10 @@ public class User {
     protected String lName;
     protected String email;
     protected String phoneNum;
-    protected String DOB;
+    protected Date DOB;
     protected String address;
 
-    public User(int userId, String accountPass, String fName, String lName, String email, String phoneNum, String DOB, String address) {
+    public User(int userId, String accountPass, String fName, String lName, String email, String phoneNum, Date DOB, String address) {
         this.userId = userId;
         this.accountPass = accountPass;
         this.fName = fName;

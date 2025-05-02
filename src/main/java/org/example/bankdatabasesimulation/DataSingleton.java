@@ -47,4 +47,12 @@ public class DataSingleton {
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
     }
+
+    public Account getCurrentAccount() {
+        return currentAccount;
+    }
+
+    public void setCurrentAccount(Account currentAccount) {
+        this.currentAccount = currentAccount;
+    }
 }

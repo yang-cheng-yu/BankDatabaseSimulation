@@ -34,7 +34,8 @@ public class CustomerController {
 
     @FXML
     void deposit(ActionEvent event) {
-
+        double money = Integer.parseInt(transactionAmoundTextField.getText());
+        DatabaseHelper.deposit(DataSingleton.getInstance().getCurrentAccount().getAccountType(),money);
     }
 
     @FXML
@@ -44,12 +45,15 @@ public class CustomerController {
 
     @FXML
     void send(ActionEvent event) {
-
+        double money = Integer.parseInt(sendAmountTextField.getText());
+        String email = sendemailTextField.getText();
+        DatabaseHelper.transfer(DataSingleton.getInstance().getCurrentAccount().getAccountType(),money,email,AccountType.DEBIT);
     }
 
     @FXML
     void withdraw(ActionEvent event) {
-
+        double money = Integer.parseInt(transactionAmoundTextField.getText());
+        DatabaseHelper.withdraw(DataSingleton.getInstance().getCurrentAccount().getAccountType(),money);
     }
 
 }

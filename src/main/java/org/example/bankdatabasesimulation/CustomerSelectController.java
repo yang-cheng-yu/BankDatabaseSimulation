@@ -59,6 +59,11 @@ public class CustomerSelectController implements Initializable {
     @FXML
     void loadAccount(MouseEvent event) {
         try {
+            Account selected = accountListBox.getSelectionModel().getSelectedItem();
+            DataSingleton data = DataSingleton.getInstance();
+            data.setCurrentAccount(selected);
+
+
             FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("customer-client.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 600, 400);
             Stage stage = new Stage();

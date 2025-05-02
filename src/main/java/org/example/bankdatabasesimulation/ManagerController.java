@@ -1,8 +1,17 @@
 package org.example.bankdatabasesimulation;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+
+import java.util.List;
+import java.util.Objects;
 
 public class ManagerController {
 
@@ -65,7 +74,7 @@ public class ManagerController {
     private RadioButton investmentRadioButton;
 
     @FXML
-    private TableView<?> managerTable;
+    private TableView<Object> managerTable;
 
     @FXML
     private TextField maxTextBox;
@@ -100,18 +109,46 @@ public class ManagerController {
 
     @FXML
     void displayAccounts(ActionEvent event) {
-
+        try {
+            int userId = Integer.parseInt(accountIdTextBox.getText());
+            DatabaseHelper.getAllAccounts(userId);
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Credentials Error");
+            alert.setContentText("Please check your credentials");
+            alert.show();
+        }
     }
 
     @FXML
     void displayAllCustomers(ActionEvent event) {
-
+        try {
+            DatabaseHelper.getAllCustomers();
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("System Error");
+            alert.setContentText("Error in the system.");
+            alert.show();
+        }
     }
 
     @FXML
     void displayAllManagers(ActionEvent event) {
+        try {
 
+            List<User> list = DatabaseHelper.getAllManagers();
+            ObservableList<User> observableList = FXCollections.observableArrayList(list);
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("System Error");
+            alert.setContentText("Error in the system.");
+            alert.show();
+        }
     }
+
 
     @FXML
     void displayOnlyActiveAccounts(ActionEvent event) {
@@ -125,22 +162,55 @@ public class ManagerController {
 
     @FXML
     void displayTransactions(ActionEvent event) {
-
+        try {
+            int userId = Integer.parseInt(accountIdTextBox.getText());
+            DatabaseHelper.getAllTransactions(userId);
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Credentials Error");
+            alert.setContentText("Please check your credentials");
+            alert.show();
+        }
     }
 
     @FXML
     void displayYourAccounts(ActionEvent event) {
-
+        try {
+            DatabaseHelper.getAllAccounts();
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("System Error");
+            alert.setContentText("Error in the system.");
+            alert.show();
+        }
     }
 
     @FXML
     void displayYourTransactions(ActionEvent event) {
-
+        try {
+            DatabaseHelper.getAllTransactions();
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("System Error");
+            alert.setContentText("Error in the system.");
+            alert.show();
+        }
     }
 
     @FXML
     void displayallUsers(ActionEvent event) {
-
+        try {
+            DatabaseHelper.getAllUsers();
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("System Error");
+            alert.setContentText("Error in the system.");
+            alert.show();
+        }
     }
 
     @FXML

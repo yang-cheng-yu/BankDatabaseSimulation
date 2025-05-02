@@ -6,16 +6,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
-public class CustomerController {
-
-    @FXML
-    private TableView<?> customerTable;
+public class ManagerNormalClientController {
 
     @FXML
     private Button depositButton;
 
     @FXML
-    private Button displayTransactionButton;
+    private TableView<?> managerTable;
 
     @FXML
     private TextField sendAmountTextField;
@@ -26,19 +23,18 @@ public class CustomerController {
     @FXML
     private TextField sendemailTextField;
 
+
     @FXML
-    private TextField transactionAmoundTextField;
+    private Button displayTransactionButton;
+
+    @FXML
+    private TextField transactionAmountTextField;
 
     @FXML
     private Button withdrawButton;
 
     @FXML
     void deposit(ActionEvent event) {
-
-    }
-
-    @FXML
-    void displayTransactions(ActionEvent event) {
 
     }
 
@@ -52,4 +48,10 @@ public class CustomerController {
 
     }
 
+    @FXML
+    void displayTransactions(ActionEvent event) {
+
+    }
+
 }
+

@@ -4,64 +4,73 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.bankdatabasesimulation.CreateUser">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.bankdatabasesimulation.CreateUserController">
    <children>
       <Label layoutX="223.0" layoutY="23.0" text="Create User">
          <font>
             <Font size="30.0" />
          </font>
       </Label>
-      <RadioButton layoutX="187.0" layoutY="77.0" mnemonicParsing="false" text="Customer" />
-      <RadioButton layoutX="343.0" layoutY="77.0" mnemonicParsing="false" text="Manager" />
-      <Label layoutX="140.0" layoutY="112.0" text="First Name:">
+      <RadioButton fx:id="customerRadioButton" layoutX="187.0" layoutY="77.0" mnemonicParsing="false" text="Customer">
+         <toggleGroup>
+            <ToggleGroup fx:id="userToggleGroup" />
+         </toggleGroup></RadioButton>
+      <RadioButton fx:id="managerRadioButton" layoutX="343.0" layoutY="77.0" mnemonicParsing="false" text="Manager" toggleGroup="$userToggleGroup" />
+      <Label layoutX="140.0" layoutY="141.0" text="First Name:">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <TextField layoutX="229.0" layoutY="112.0" prefHeight="25.0" prefWidth="188.0" />
-      <Label layoutX="140.0" layoutY="153.0" text="Last Name:">
+      <TextField fx:id="fNameTextField" layoutX="229.0" layoutY="141.0" prefHeight="25.0" prefWidth="188.0" />
+      <Label layoutX="141.0" layoutY="176.0" text="Last Name:">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <TextField layoutX="229.0" layoutY="153.0" prefHeight="25.0" prefWidth="188.0" />
-      <Label layoutX="176.0" layoutY="188.0" text="email:">
+      <TextField fx:id="lNameTextField" layoutX="229.0" layoutY="176.0" prefHeight="25.0" prefWidth="188.0" />
+      <Label layoutX="177.0" layoutY="213.0" text="email:">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <TextField layoutX="229.0" layoutY="188.0" prefHeight="25.0" prefWidth="188.0" />
-      <Label layoutX="109.0" layoutY="225.0" text="Phone Number:">
+      <TextField fx:id="emailTextField" layoutX="229.0" layoutY="213.0" prefHeight="25.0" prefWidth="188.0" />
+      <Label layoutX="112.0" layoutY="250.0" text="Phone Number:">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <TextField layoutX="229.0" layoutY="225.0" prefHeight="25.0" prefWidth="188.0" />
-      <Label layoutX="130.0" layoutY="260.0" text="Date of Birth:">
+      <TextField fx:id="phoneNumTextField" layoutX="229.0" layoutY="250.0" prefHeight="25.0" prefWidth="188.0" />
+      <Label layoutX="130.0" layoutY="285.0" text="Date of Birth:">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <TextField layoutX="229.0" layoutY="260.0" prefHeight="25.0" prefWidth="188.0" />
-      <Label layoutX="157.0" layoutY="294.0" text="Address:">
+      <TextField fx:id="dateBirthTextField" layoutX="229.0" layoutY="285.0" prefHeight="25.0" prefWidth="188.0" />
+      <Label layoutX="157.0" layoutY="320.0" text="Address:">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <TextField layoutX="229.0" layoutY="294.0" prefHeight="25.0" prefWidth="188.0" />
-      <Button layoutX="322.0" layoutY="332.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="111.0" text="Create User">
+      <TextField fx:id="addressTextField" layoutX="229.0" layoutY="320.0" prefHeight="25.0" prefWidth="188.0" />
+      <Button fx:id="createUserButton" layoutX="475.0" layoutY="332.0" mnemonicParsing="false" onAction="#createUser" prefHeight="45.0" prefWidth="111.0" text="Create User">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Button layoutX="168.0" layoutY="332.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="111.0" text="Go Back">
+      <Button fx:id="goBackButton" layoutX="29.0" layoutY="332.0" mnemonicParsing="false" onAction="#goBack" prefHeight="45.0" prefWidth="111.0" text="Go Back">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
+      <TextField fx:id="passTextField" layoutX="229.0" layoutY="106.0" prefHeight="25.0" prefWidth="188.0" />
+      <Label layoutX="152.0" layoutY="106.0" text="Password:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

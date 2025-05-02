@@ -41,6 +41,7 @@
                </children>
             </HBox>
             <Button fx:id="loginButton" mnemonicParsing="false" onAction="#login" text="Log In" />
+            <Button fx:id="createUserButton" mnemonicParsing="false" onAction="#createUser" text="Create User" />
          </children>
       </VBox>
    </center>

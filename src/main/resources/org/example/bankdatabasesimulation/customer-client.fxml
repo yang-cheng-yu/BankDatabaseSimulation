@@ -15,33 +15,33 @@
             <Font size="30.0" />
          </font>
       </Label>
-      <TableView layoutX="24.0" layoutY="200.0" prefHeight="177.0" prefWidth="552.0">
+      <TableView fx:id="customerTable" layoutX="24.0" layoutY="200.0" prefHeight="177.0" prefWidth="552.0">
         <columns>
           <TableColumn prefWidth="75.0" text="C1" />
           <TableColumn prefWidth="75.0" text="C2" />
         </columns>
       </TableView>
-      <Button layoutX="244.0" layoutY="156.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="149.0" text="Display All Transactions" />
+      <Button fx:id="displayTransactionButton" layoutX="244.0" layoutY="156.0" mnemonicParsing="false" onAction="#displayTransactions" prefHeight="38.0" prefWidth="149.0" text="Display All Transactions" />
       <Label layoutX="35.0" layoutY="71.0" text="Amount: ">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <TextField layoutX="110.0" layoutY="71.0" />
-      <Button layoutX="110.0" layoutY="162.0" mnemonicParsing="false" text="Deposit" />
-      <Button layoutX="34.0" layoutY="162.0" mnemonicParsing="false" text="Withdraw" />
+      <TextField fx:id="transactionAmoundTextField" layoutX="110.0" layoutY="71.0" />
+      <Button fx:id="depositButton" layoutX="202.0" layoutY="102.0" mnemonicParsing="false" onAction="#deposit" text="Deposit" />
+      <Button fx:id="withdrawButton" layoutX="110.0" layoutY="102.0" mnemonicParsing="false" onAction="#withdraw" text="Withdraw" />
       <Label layoutX="361.0" layoutY="71.0" text="Amount: ">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <TextField layoutX="426.0" layoutY="71.0" />
+      <TextField fx:id="sendAmountTextField" layoutX="426.0" layoutY="71.0" />
       <Label layoutX="371.0" layoutY="102.0" text="Email: ">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <TextField layoutX="426.0" layoutY="102.0" />
-      <Button layoutX="532.0" layoutY="137.0" mnemonicParsing="false" text="Send" />
+      <TextField fx:id="sendemailTextField" layoutX="426.0" layoutY="102.0" />
+      <Button fx:id="sendButton" layoutX="532.0" layoutY="137.0" mnemonicParsing="false" onAction="#send" text="Send" />
    </children>
 </AnchorPane>

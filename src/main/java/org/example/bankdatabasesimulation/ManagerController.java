@@ -9,12 +9,15 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 
 import java.util.List;
 import java.util.Objects;
 
 public class ManagerController {
 
+    @FXML
+    private HBox tableContainer;
 
     @FXML
     private TextField accountIdTextBox;
@@ -247,6 +250,5 @@ public class ManagerController {
     void withdraw(ActionEvent event) {
 
     }
-
 }
 

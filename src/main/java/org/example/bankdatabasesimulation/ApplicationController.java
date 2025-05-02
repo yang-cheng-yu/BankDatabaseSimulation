@@ -23,6 +23,9 @@ public class ApplicationController implements Initializable {
     private TextField emailBox;
 
     @FXML
+    private Button createUserButton;
+
+    @FXML
     private PasswordField passwordBox;
 
     @FXML
@@ -43,13 +46,24 @@ public class ApplicationController implements Initializable {
         if (DatabaseHelper.login(emailBox.getText(), passwordBox.getText())) {
             System.out.println("if");
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("customer-select.fxml"));
-                Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-                Stage stage = new Stage();
-                stage.setScene(scene);
-                stage.show();
-                Stage window = (Stage) emailBox.getScene().getWindow();
-                window.close();
+
+                if (DataSingleton.getInstance().getCurrentUser().getClass() == Customer.class) {
+                    FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("customer-select.fxml"));
+                    Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+                    Stage stage = new Stage();
+                    stage.setScene(scene);
+                    stage.show();
+                    Stage window = (Stage) emailBox.getScene().getWindow();
+                    window.close();
+                } else {
+                    FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("manager-select.fxml"));
+                    Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+                    Stage stage = new Stage();
+                    stage.setScene(scene);
+                    stage.show();
+                    Stage window = (Stage) emailBox.getScene().getWindow();
+                    window.close();
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -74,5 +88,20 @@ public class ApplicationController implements Initializable {
         DatabaseHelper.createCustomersTable();
         DatabaseHelper.createManagersTable();
         DatabaseHelper.createTransactionTable();
+    }
+
+    @FXML
+    void createUser(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("CreateUser.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.show();
+            Stage window = (Stage) emailBox.getScene().getWindow();
+            window.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

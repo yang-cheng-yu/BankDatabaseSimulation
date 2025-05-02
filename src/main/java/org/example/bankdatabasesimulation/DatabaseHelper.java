@@ -136,7 +136,7 @@ public class DatabaseHelper {
 
 
     public static void insertManager(String accountPass, String fname, String lname,
-                                      String email, String phonenum, String DOB, String address){
+                                      String email, String phonenum, long DOB, String address){
         String sql = """
                 INSERT INTO users(accountPass,fname,lname,email,phonenum,DOB,address) VALUES(?,?,?,?,?,?,?);
                 """;
@@ -147,7 +147,7 @@ public class DatabaseHelper {
             stmt.setString(3,lname);
             stmt.setString(4,email);
             stmt.setString(5,phonenum);
-            stmt.setString(6,DOB);
+            stmt.setDate(6,new Date(DOB));
             stmt.setString(7,address);
             stmt.executeUpdate();
 
@@ -383,7 +383,7 @@ public class DatabaseHelper {
                     String fName = rs.getString("fName");
                     String lName = rs.getString("lName");
                     String phoneNum = rs.getString("phoneNum");
-                    String dob = rs.getString("DOB");
+                    Date dob = rs.getDate("DOB");
                     String address = rs.getString("Address");
 
                     String sql2 = "SELECT * FROM customers WHERE userId = ? LIMIT 1";

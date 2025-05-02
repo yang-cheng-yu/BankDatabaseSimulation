@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.bankdatabasesimulation.ManagerSelectController">
+   <children>
+      <Label layoutX="203.0" layoutY="33.0" text="Welcome Back">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <Label layoutX="150.0" layoutY="113.0" text="Your Accounts:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <ListView layoutX="43.0" layoutY="138.0" prefHeight="200.0" prefWidth="321.0" />
+      <Label layoutX="431.0" layoutY="113.0" text="Create New">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <ComboBox layoutX="398.0" layoutY="150.0" prefWidth="150.0" promptText="Choose Type" />
+      <Button layoutX="447.0" layoutY="188.0" mnemonicParsing="false" text="Create" />
+      <Button layoutX="422.0" layoutY="313.0" mnemonicParsing="false" text="Manage System" />
+   </children>
+</AnchorPane>

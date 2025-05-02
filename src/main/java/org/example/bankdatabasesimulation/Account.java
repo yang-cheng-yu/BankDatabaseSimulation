@@ -15,6 +15,11 @@ public class Account {
         this.status = status;
     }
 
+    @Override
+    public String toString() {
+        return accountType +  " " + userId;
+    }
+
     public int getAccountId() {
         return accountId;
     }

@@ -29,10 +29,6 @@ public class AccountType {
 
     @Override
     public String toString() {
-        return "AccountType{" +
-                "accTypeId=" + accTypeId +
-                ", accTypeDescription='" + accTypeDescription + '\'' +
-                ", interestRate=" + interestRate +
-                '}';
+        return accTypeDescription;
     }
 }

@@ -32,17 +32,14 @@ public class CustomerSelectController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         DataSingleton data = DataSingleton.getInstance();
 
-        List<Account> accountList = DatabaseHelper.getAllAccounts();
+        refreshAccounts();
+
         List<AccountType> typeList = new ArrayList<>();
+        typeList.add(AccountType.CREDIT);
+        typeList.add(AccountType.DEBIT);
+        typeList.add(AccountType.INVESTMENT);
+        accountTypeComboBox.setItems(FXCollections.observableArrayList(typeList));
 
-        for (Account a : accountList) {
-            AccountType temp = a.getAccountType();
-            if (!typeList.contains(temp)) {
-                typeList.add(temp);
-            }
-        }
-
-        accountListBox.setItems(FXCollections.observableArrayList(accountList));
         accountListBox.setOnMouseClicked(mouseEvent -> {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("customer-client.fxml"));
@@ -66,10 +63,16 @@ public class CustomerSelectController implements Initializable {
         });
     }
 
+    private void refreshAccounts() {
+        List<Account> accountList = DatabaseHelper.getAllAccounts();
+        accountListBox.setItems(FXCollections.observableArrayList(accountList));
+    }
+
     @FXML
     void createAccount(ActionEvent event) {
+        System.out.println("Create Account");
         AccountType type = accountTypeComboBox.getValue();
-
-
+        DatabaseHelper.insertAccount(type, 0);
+        refreshAccounts();
     }
 }

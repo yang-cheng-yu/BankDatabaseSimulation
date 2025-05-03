@@ -40,4 +40,7 @@ public class Account {
         return status;
     }
 
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
 }

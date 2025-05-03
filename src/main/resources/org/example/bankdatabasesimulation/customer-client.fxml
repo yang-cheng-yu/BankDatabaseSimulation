@@ -17,8 +17,11 @@
       </Label>
       <TableView fx:id="customerTable" layoutX="24.0" layoutY="200.0" prefHeight="177.0" prefWidth="552.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
+          <TableColumn fx:id="tranIdTable" prefWidth="100.0" text="Transaction ID" />
+          <TableColumn fx:id="accountIdTable" prefWidth="75.0" text="Account ID" />
+          <TableColumn fx:id="tranAmountTable" prefWidth="75.0" text="Amount" />
+          <TableColumn fx:id="tranDescTable" prefWidth="75.0" text="Description" />
+          <TableColumn fx:id="tranDateTable" prefWidth="75.0" text="Date" />
         </columns>
       </TableView>
       <Button fx:id="displayTransactionButton" layoutX="361.0" layoutY="157.0" mnemonicParsing="false" onAction="#displayTransactions" prefHeight="38.0" prefWidth="149.0" text="Display All Transactions" />

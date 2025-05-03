@@ -1,23 +1,27 @@
 package org.example.bankdatabasesimulation;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ManagerNormalClientController implements Initializable {
 
+    public TableColumn tranIdTable;
+    public TableColumn accountIdTable;
+    public TableColumn tranAmountTable;
+    public TableColumn tranDescTable;
+    public TableColumn tranDateTable;
     @FXML
     private Button depositButton;
 
     @FXML
-    private TableView<?> managerTable;
+    private TableView<Transaction> managerTable;
 
     @FXML
     private TextField sendAmountTextField;
@@ -44,6 +48,12 @@ public class ManagerNormalClientController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         updateBalance();
+
+        tranIdTable.setCellValueFactory(new PropertyValueFactory<>("transactionId"));
+        accountIdTable.setCellValueFactory(new PropertyValueFactory<>("accountId"));
+        tranAmountTable.setCellValueFactory(new PropertyValueFactory<>("tranAmount"));
+        tranDescTable.setCellValueFactory(new PropertyValueFactory<>("tranDescription"));
+        tranDateTable.setCellValueFactory(new PropertyValueFactory<>("tranDate"));
     }
 
 
@@ -71,7 +81,7 @@ public class ManagerNormalClientController implements Initializable {
 
     @FXML
     void displayTransactions(ActionEvent event) {
-
+        managerTable.setItems(FXCollections.observableArrayList(DatabaseHelper.getCurrentTransactions()));
     }
     private void updateBalance(){
         double money = DataSingleton.getInstance().getCurrentAccount().getBalance();

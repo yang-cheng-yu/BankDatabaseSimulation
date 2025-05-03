@@ -1,20 +1,29 @@
 package org.example.bankdatabasesimulation;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.chart.PieChart;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
+import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class CustomerController implements Initializable {
 
+
+    @FXML private TableColumn<Transaction, Integer> tranIdTable;
+    @FXML private TableColumn<Transaction, Integer> accountIdTable;
+    @FXML private TableColumn<Transaction, Double> tranAmountTable;
+    @FXML private TableColumn<Transaction, String> tranDescTable;
+    @FXML private TableColumn<Transaction, Date> tranDateTable;
+
     @FXML
-    private TableView<?> customerTable;
+    private TableView<Transaction> customerTable;
 
     @FXML
     private Button depositButton;
@@ -49,7 +58,7 @@ public class CustomerController implements Initializable {
 
     @FXML
     void displayTransactions(ActionEvent event) {
-
+        customerTable.setItems(FXCollections.observableArrayList(DatabaseHelper.getCurrentTransactions()));
     }
 
     @FXML
@@ -70,6 +79,12 @@ public class CustomerController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         updateBalance();
+
+        tranIdTable.setCellValueFactory(new PropertyValueFactory<>("transactionId"));
+        accountIdTable.setCellValueFactory(new PropertyValueFactory<>("accountId"));
+        tranAmountTable.setCellValueFactory(new PropertyValueFactory<>("tranAmount"));
+        tranDescTable.setCellValueFactory(new PropertyValueFactory<>("tranDescription"));
+        tranDateTable.setCellValueFactory(new PropertyValueFactory<>("tranDate"));
     }
 
     private void updateBalance(){

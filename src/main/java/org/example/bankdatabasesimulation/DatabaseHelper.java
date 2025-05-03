@@ -333,23 +333,11 @@ public class DatabaseHelper {
     {
         List<Transaction> transactions = new ArrayList<>();
 
-        String sql="SELECT accountId FROM accounts WHERE UserId = ?";
+        String sql="SELECT * FROM transactions WHERE accountId IN (SELECT accountId FROM accounts WHERE userId = ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1,id);
             ResultSet rs = ps.executeQuery();
-            int accountId1 = rs.getInt("accountId");
-            int accountId2 = rs.getInt("accountId");
-            int accountId3 = rs.getInt("accountId");
 
-            String sql2= """
-                    SELECT * FROM transactions WHERE accountId = ? OR ? OR ?;
-                    """;
-            try (PreparedStatement ps2 = connection.prepareStatement(sql2)) {
-                ps2.setInt(1,accountId1);
-                ps2.setInt(2,accountId2);
-                ps2.setInt(3,accountId3);
-
-                ResultSet result = ps2.executeQuery();
                 while(rs.next())
                 {
                     transactions.add(new Transaction(
@@ -359,11 +347,32 @@ public class DatabaseHelper {
                             rs.getString(4),
                             rs.getDate(5)));
                 }
-            }
+            } catch (SQLException ex) {
+            throw new RuntimeException(ex);
         }
-        catch(SQLException e)
-        {
-            System.out.println(e.getMessage());
+        return transactions;
+    }
+
+    public static List<Transaction> getCurrentTransactions()
+    {
+        List<Transaction> transactions = new ArrayList<>();
+
+        String sql="SELECT * FROM transactions WHERE accountId = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1,DataSingleton.getInstance().getCurrentAccount().getAccountId());
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next())
+            {
+                transactions.add(new Transaction(
+                        rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getDouble(3),
+                        rs.getString(4),
+                        rs.getDate(5)));
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
         }
         return transactions;
     }
@@ -523,6 +532,7 @@ public class DatabaseHelper {
                     int rowsAffected = updateStmt.executeUpdate();
                     if (rowsAffected > 0) {
                         System.out.println("Withdrawal successful. New balance: " + newBalance);
+                        DataSingleton.getInstance().getCurrentAccount().setBalance(newBalance);
                     } else {
                         System.err.println("Withdrawal failed. No account found.");
                     }
@@ -577,6 +587,7 @@ public class DatabaseHelper {
                     int rowsAffected = updateStmt.executeUpdate();
                     if (rowsAffected > 0) {
                         System.out.println("Deposit successful. New balance: " + newBalance);
+                        DataSingleton.getInstance().getCurrentAccount().setBalance(newBalance);
                     } else {
                         System.err.println("Deposit failed. No account found.");
                     }
@@ -599,6 +610,8 @@ public class DatabaseHelper {
             ps.setDouble(2,amount);
             ps.setString(3,description);
             ps.setDate(4,new Date(System.currentTimeMillis()));
+
+            ps.executeUpdate();
         }
         catch (SQLException e) {
             System.err.println("Error with Inserting Transaction" + e.getMessage());
@@ -650,6 +663,7 @@ public class DatabaseHelper {
                             int rowsAffected = select3.executeUpdate();
                             if (rowsAffected > 0) {
                                 System.out.println("Money sent Successfuly");
+
                             } else {
                                 System.err.println("Transaction failed");
                             }

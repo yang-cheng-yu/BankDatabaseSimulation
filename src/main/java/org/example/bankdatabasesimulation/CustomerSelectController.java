@@ -43,6 +43,11 @@ public class CustomerSelectController implements Initializable {
 
     }
 
+    @FXML
+    void viewAllTransactions(ActionEvent event) {
+
+    }
+
     private void refreshAccounts() {
         List<Account> accountList = DatabaseHelper.getAllAccounts();
         accountListBox.setItems(FXCollections.observableArrayList(accountList));

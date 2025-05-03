@@ -56,9 +56,20 @@ public class CustomerController implements Initializable {
 
     @FXML
     void deposit(ActionEvent event) {
-        double money = Double.parseDouble(transactionAmoundTextField.getText());
-        DatabaseHelper.deposit(DataSingleton.getInstance().getCurrentAccount().getAccountType(),money);
-        updateBalance();
+        try {
+            double money = Double.parseDouble(transactionAmoundTextField.getText());
+            DatabaseHelper.deposit(DataSingleton.getInstance().getCurrentAccount().getAccountType(), money);
+            updateBalance();
+        } catch (Exception e) {
+            System.err.println("Input all fields" + e.getMessage());
+            javafx.application.Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Transfer Failed");
+                alert.setHeaderText("Missing Fields");
+                alert.setContentText("Please input all missing fields to transfer");
+                alert.showAndWait();
+            });
+        }
     }
 
     @FXML
@@ -89,17 +100,39 @@ public class CustomerController implements Initializable {
 
     @FXML
     void send(ActionEvent event) {
-        double money = Double.parseDouble(sendAmountTextField.getText());
-        String email = sendemailTextField.getText();
-        DatabaseHelper.transfer(DataSingleton.getInstance().getCurrentAccount().getAccountType(),money,email,AccountType.DEBIT);
-        updateBalance();
+        try {
+            double money = Double.parseDouble(sendAmountTextField.getText());
+            String email = sendemailTextField.getText();
+            DatabaseHelper.transfer(DataSingleton.getInstance().getCurrentAccount().getAccountType(), money, email, AccountType.DEBIT);
+            updateBalance();
+        } catch (Exception e) {
+            System.err.println("Input all fields" + e.getMessage());
+            javafx.application.Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Transfer Failed");
+                alert.setHeaderText("Missing Fields");
+                alert.setContentText("Please input all missing fields to transfer");
+                alert.showAndWait();
+            });
+        }
     }
 
     @FXML
     void withdraw(ActionEvent event) {
-        double money = Double.parseDouble(transactionAmoundTextField.getText());
-        DatabaseHelper.withdraw(DataSingleton.getInstance().getCurrentAccount().getAccountType(),money);
-        updateBalance();
+        try {
+            double money = Double.parseDouble(transactionAmoundTextField.getText());
+            DatabaseHelper.withdraw(DataSingleton.getInstance().getCurrentAccount().getAccountType(), money);
+            updateBalance();
+        } catch (Exception e) {
+            System.err.println("Input all fields" + e.getMessage());
+            javafx.application.Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Transfer Failed");
+                alert.setHeaderText("Missing Fields");
+                alert.setContentText("Please input all missing fields to transfer");
+                alert.showAndWait();
+            });
+        }
     }
 
     @Override

@@ -522,6 +522,14 @@ public class DatabaseHelper {
                 int status = rs.getInt("status");
 
                 if (status == 1){
+                    System.err.println("Can't withdraw money from a frozen account");
+                    javafx.application.Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Withdrawal Failed");
+                        alert.setHeaderText("Account Status Violation");
+                        alert.setContentText("Can't withdraw money from a frozen account");
+                        alert.showAndWait();
+                    });
                     System.err.println("can't withdraw from frozen account");
                     return;
                 }
@@ -639,7 +647,6 @@ public class DatabaseHelper {
         sendMoney(money,email,receivingAccountType);
     }
     private static void sendMoney(double money, String email, AccountType receivingAccountType) {
-        System.out.println("looking for email" + email);
         String sql = """
                 SELECT userId FROM users WHERE email = ?;
                 """;
@@ -648,7 +655,6 @@ public class DatabaseHelper {
 
             ResultSet rs = select.executeQuery();
             if (rs.next()) {
-                System.out.println("found emain userId= "+rs.getInt("userId"));
                 int userId = rs.getInt("userId");
 
                 String sql2 = """

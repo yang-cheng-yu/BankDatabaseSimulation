@@ -66,6 +66,17 @@ public class CreateUserController {
             String phonenum = phoneNumTextField.getText();
             long DOB = Long.parseLong(dateBirthTextField.getText());
             String address = addressTextField.getText();
+
+            if (pass.isEmpty()||fname.isEmpty()||lname.isEmpty()||email.isEmpty()||phonenum.isEmpty()||address.isEmpty()){
+                System.err.println("Fill out every input field");
+                javafx.application.Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Create User Failed");
+                    alert.setHeaderText("Missing Input Fields");
+                    alert.setContentText("Please fill out missing input fields to create user");
+                    alert.showAndWait();
+                });
+            }
             if (userType == customerRadioButton) {
                 DatabaseHelper.insertCustomer(pass, fname, lname, email, phonenum, DOB, address);
                 goBackToMainPage();

@@ -16,14 +16,14 @@
          <children>
             <HBox alignment="TOP_RIGHT" prefHeight="50.0" prefWidth="200.0">
                <children>
-                  <Button fx:id="createCustomerButton" mnemonicParsing="false" onMouseClicked="#createCustomer" text="Create Customer">
+                  <Button fx:id="createUserButton" mnemonicParsing="false" onAction="#createUser" text="Create User">
                      <HBox.margin>
-                        <Insets left="20.0" right="20.0" />
+                        <Insets right="50.0" />
                      </HBox.margin>
                   </Button>
                </children>
             </HBox>
-            <Label alignment="CENTER" text="Log In As...">
+            <Label alignment="CENTER" text="Log In">
                <font>
                   <Font name="Arial Bold" size="36.0" />
                </font>
@@ -41,7 +41,6 @@
                </children>
             </HBox>
             <Button fx:id="loginButton" mnemonicParsing="false" onAction="#login" text="Log In" />
-            <Button fx:id="createUserButton" mnemonicParsing="false" onAction="#createUser" text="Create User" />
          </children>
       </VBox>
    </center>

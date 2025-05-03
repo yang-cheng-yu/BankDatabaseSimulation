@@ -6,12 +6,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -185,55 +190,23 @@ public class ManagerController implements Initializable {
     }
 
     @FXML
-    void displayTransactions(ActionEvent event) {
-        try {
-            int userId = Integer.parseInt(accountIdTextBox.getText());
-            DatabaseHelper.getAllTransactions(userId);
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Credentials Error");
-            alert.setContentText("Please check your credentials");
-            alert.show();
-        }
-    }
-
-    @FXML
-    void displayYourAccounts(ActionEvent event) {
-        try {
-            DatabaseHelper.getAllAccounts();
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("System Error");
-            alert.setContentText("Error in the system.");
-            alert.show();
-        }
-    }
-
-    @FXML
-    void displayYourTransactions(ActionEvent event) {
-        try {
-            DatabaseHelper.getAllTransactions();
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("System Error");
-            alert.setContentText("Error in the system.");
-            alert.show();
-        }
-    }
-
-    @FXML
     void displayallUsers(ActionEvent event) {
         try {
-            DatabaseHelper.getAllUsers();
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("System Error");
-            alert.setContentText("Error in the system.");
-            alert.show();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("displayUsers.fxml"));
+            Parent root = loader.load();
+
+            DisplayUsersController controller = loader.getController();
+            List<User> data = DatabaseHelper.getAllUsers();
+            controller.setUsers(data);
+
+            Scene scene = new Scene(root, 600, 400);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.show();
+            Stage window = (Stage) accountTable.getScene().getWindow();
+            window.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -252,32 +225,55 @@ public class ManagerController implements Initializable {
 
     }
 
-
-
     @FXML
     void sortAccountsByBalance(ActionEvent event) {
+        List<Account> testing =  accountTable.getItems();
         List<Account> accounts = DatabaseHelper.getEveryAccount();
-        accounts = accounts.stream()
+        testing = testing.stream()
                 .sorted(Comparator.comparing(account -> account.getBalance()))
                 .collect(Collectors.toList());
 
-        accountTable.setItems(FXCollections.observableArrayList(accounts));
-    }
-
-    @FXML
-    void sortUsersByName(ActionEvent event) {
-
-    }
-
-    @FXML
-    void viewInterest(ActionEvent event) {
-
+        accountTable.setItems(FXCollections.observableArrayList(testing));
     }
 
     public void displayUserTransaction(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("displayTransactions.fxml"));
+            Parent root = loader.load();
+
+            int userId = Integer.parseInt(userIdTextBox.getText());
+
+            DisplayTransactionController controller = loader.getController();
+            List<Transaction> data = DatabaseHelper.getAllTransactions(userId);
+            controller.setTransaction(data);
+
+            Scene scene = new Scene(root, 600, 400);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.show();
+            Stage window = (Stage) accountTable.getScene().getWindow();
+            window.close();
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Credentials Error");
+            alert.setContentText("Please check your credentials");
+            alert.show();
+            throw new RuntimeException(e);
+        }
     }
 
     public void displayUserAccounts(ActionEvent actionEvent) {
+        try {
+            int userId = Integer.parseInt(userIdTextBox.getText());
+            accountTable.setItems(FXCollections.observableArrayList(DatabaseHelper.getAllAccounts(userId)));
+        } catch (Exception e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Credentials Error");
+            alert.setContentText("Please check your credentials");
+            alert.show();
+        }
     }
 
     @Override

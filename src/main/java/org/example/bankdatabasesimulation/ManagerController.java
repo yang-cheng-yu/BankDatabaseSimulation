@@ -6,16 +6,27 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 
+import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
-public class ManagerController {
+public class ManagerController implements Initializable {
 
+    public TableView<Account> accountTable;
+    public TableColumn<Account, Integer> accountIdCol;
+    public TableColumn<Account, Integer> userIdCol;
+    public TableColumn<Account, AccountType> accountTypeCol;
+    public TableColumn<Account, Double> balanceCol;
+    public TableColumn<Account, Integer> statusCol;
     @FXML
     private HBox tableContainer;
 
@@ -151,7 +162,25 @@ public class ManagerController {
 
     @FXML
     void displayRange(ActionEvent event) {
+        try {
+            double min = Double.parseDouble(minTextBox.getText());
+            double max = Double.parseDouble(maxTextBox.getText());
 
+            List<Account> accounts = DatabaseHelper.getEveryAccount();
+            accounts = accounts.stream()
+                            .filter(account -> account.getBalance() >= min && account.getBalance() <= max)
+                                    .collect(Collectors.toList());
+
+
+            accountTable.setItems(FXCollections.observableArrayList(accounts));
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Credentials Error");
+            alert.setContentText("Please check your credentials");
+            alert.show();
+        }
     }
 
     @FXML
@@ -237,6 +266,21 @@ public class ManagerController {
     @FXML
     void viewInterest(ActionEvent event) {
 
+    }
+
+    public void displayUserTransaction(ActionEvent actionEvent) {
+    }
+
+    public void displayUserAccounts(ActionEvent actionEvent) {
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        accountIdCol.setCellValueFactory(new PropertyValueFactory<>("accountId"));
+        userIdCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
+        accountTypeCol.setCellValueFactory(new PropertyValueFactory<>("accountTypeDescription"));
+        balanceCol.setCellValueFactory(new PropertyValueFactory<>("balance"));
+        statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
     }
 }
 

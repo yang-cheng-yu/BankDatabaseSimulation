@@ -36,11 +36,31 @@ public class Account {
         return balance;
     }
 
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     public Status getStatus() {
         return status;
     }
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public String getAccountTypeDescription() {
+        return accountType.toString();
     }
 }

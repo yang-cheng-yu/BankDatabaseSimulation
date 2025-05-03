@@ -202,6 +202,41 @@ public class DatabaseHelper {
         return getAllAccounts(id);
     }
 
+    public static List<Account> getEveryAccount() {
+        List<Account> accounts = new ArrayList<>();
+        String sql = "SELECT * FROM accounts";
+        try (PreparedStatement ps = connection.prepareStatement(sql)){
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int type = rs.getInt(3);
+                AccountType testing = switch (type) {
+                    case 1 -> AccountType.DEBIT;
+                    case 2 -> AccountType.CREDIT;
+                    case 3 -> AccountType.INVESTMENT;
+                    default -> null;
+                };
+                int status = rs.getInt(5);
+                Status test = switch (status) {
+                    case 0 -> Status.ACTIVE;
+                    case 1 -> Status.FROZEN;
+                    case 2 -> Status.IN_DEBT;
+                    default -> null;
+                };
+                accounts.add(new Account(
+                        rs.getInt(1),
+                        rs.getInt(2),
+                        testing,
+                        rs.getDouble(4),
+                        test
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return accounts;
+    }
+
     public static List<Account> getAllAccounts(int id){
         List<Account> accounts = new ArrayList<>();
         String sql = """
@@ -643,8 +678,32 @@ public class DatabaseHelper {
 
     public static void transfer(AccountType accountType, double money, String email, AccountType receivingAccountType) {
         money = Math.abs(money);
-        withdraw(accountType,money);
-        sendMoney(money,email,receivingAccountType);
+
+        if (recipientExistsWithAccount(email,receivingAccountType)) {
+            withdraw(accountType,money);
+            sendMoney(money,email,receivingAccountType);
+        } else {
+            javafx.application.Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Transfer Failed");
+                alert.setHeaderText("Invalid Recipient");
+                alert.setContentText("Recipient email is invalid or has no " + receivingAccountType + " account.");
+                alert.showAndWait();
+            });
+        }
+    }
+
+    private static boolean recipientExistsWithAccount(String email, AccountType accountType) {
+        String sql = "SELECT u.userId FROM users u JOIN accounts a ON u.userId = a.userId WHERE u.email = ? AND a.accountTypeId = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, email.trim());
+            ps.setInt(2, accountType.getAccTypeId());
+            ResultSet rs = ps.executeQuery();
+            return rs.next(); // true if a match is found
+        } catch (SQLException e) {
+            System.err.println("Recipient check failed: " + e.getMessage());
+            return false;
+        }
     }
     private static void sendMoney(double money, String email, AccountType receivingAccountType) {
         String sql = """

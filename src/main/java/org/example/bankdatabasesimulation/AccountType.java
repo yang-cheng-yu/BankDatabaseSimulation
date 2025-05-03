@@ -31,4 +31,16 @@ public class AccountType {
     public String toString() {
         return accTypeDescription;
     }
+
+    public void setAccTypeId(int accTypeId) {
+        this.accTypeId = accTypeId;
+    }
+
+    public void setAccTypeDescription(String accTypeDescription) {
+        this.accTypeDescription = accTypeDescription;
+    }
+
+    public void setInterestRate(double interestRate) {
+        this.interestRate = interestRate;
+    }
 }

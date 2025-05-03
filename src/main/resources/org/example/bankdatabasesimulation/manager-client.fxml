@@ -13,34 +13,36 @@
    <children>
       <HBox fx:id="tableContainer" layoutX="232.0" layoutY="255.0" prefHeight="347.0" prefWidth="688.0">
          <children>
-            <TableView fx:id="managerTable" prefHeight="347.0" prefWidth="716.0">
+            <TableView fx:id="accountTable" prefHeight="347.0" prefWidth="716.0">
               <columns>
-                <TableColumn prefWidth="75.0" text="C1" />
-                <TableColumn prefWidth="75.0" text="C2" />
+                <TableColumn fx:id="accountIdCol" prefWidth="75.0" text="Account Id" />
+                <TableColumn fx:id="userIdCol" prefWidth="75.0" text="user Id" />
+                  <TableColumn fx:id="accountTypeCol" prefWidth="100.0" text="Account Type" />
+                  <TableColumn fx:id="balanceCol" prefWidth="75.0" text="Balance" />
+                  <TableColumn fx:id="statusCol" prefWidth="75.0" text="Status" />
               </columns>
             </TableView>
          </children>
       </HBox>
-      <Button id="displayAllUsersButton" fx:id="displayAllUsersButton" layoutX="14.0" layoutY="24.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="119.0" text="Display All Users" />
-      <Button id="displayAllCustomerButton" fx:id="displayAllCustomerButton" layoutX="14.0" layoutY="65.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="148.0" text="Display All Customers" />
-      <Button id="displayAllManagersButton" fx:id="displayAllManagersButton" layoutX="14.0" layoutY="109.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="148.0" text="Display all Managers" />
-      <Button id="displayYourTransactionsButton" fx:id="displayYourTransactionsButton" layoutX="14.0" layoutY="522.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="163.0" text="Display Your  Transactions" />
+      <Button id="displayAllUsersButton" fx:id="displayAllUsersButton" layoutX="14.0" layoutY="291.0" mnemonicParsing="false" onAction="#displayallUsers" prefHeight="37.0" prefWidth="119.0" text="Display All Users" />
+      <Button id="displayAllCustomerButton" fx:id="displayAllCustomerButton" layoutX="14.0" layoutY="336.0" mnemonicParsing="false" onAction="#displayAllCustomers" prefHeight="37.0" prefWidth="148.0" text="Display All Customers" />
+      <Button id="displayAllManagersButton" fx:id="displayAllManagersButton" layoutX="14.0" layoutY="384.0" mnemonicParsing="false" onAction="#displayAllManagers" prefHeight="37.0" prefWidth="148.0" text="Display all Managers" />
       <TextField fx:id="userIdTextBox" layoutX="404.0" layoutY="94.0" prefHeight="25.0" prefWidth="182.0" />
       <Label id="userIdLabel" layoutX="337.0" layoutY="94.0" text="User ID:">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Button id="displayTransactionButton" fx:id="displayTransactionButton" layoutX="462.0" layoutY="127.0" mnemonicParsing="false" text="Display Transactions" />
+      <Button id="displayTransactionButton" fx:id="displayTransactionButton" layoutX="462.0" layoutY="127.0" mnemonicParsing="false" onAction="#displayUserTransaction" text="Display Transactions" />
       <TextField fx:id="accountIdTextBox" layoutX="404.0" layoutY="176.0" prefHeight="25.0" prefWidth="182.0" />
       <Label id="AccountIdLabel" layoutX="309.0" layoutY="176.0" text="Account ID:">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Button id="freezeAccountButton" fx:id="freezeAccountButton" layoutX="488.0" layoutY="212.0" mnemonicParsing="false" text="Freeze Account" />
-      <Button id="displayAccountsButton" fx:id="displayAccountsButton" layoutX="351.0" layoutY="127.0" mnemonicParsing="false" text="Display Accounts" />
-      <Button id="displayButton" fx:id="displayButton" layoutX="742.0" layoutY="200.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Display" />
+      <Button id="freezeAccountButton" fx:id="freezeAccountButton" layoutX="488.0" layoutY="212.0" mnemonicParsing="false" onAction="#freezeAccount" text="Freeze Account" />
+      <Button id="displayAccountsButton" fx:id="displayAccountsButton" layoutX="351.0" layoutY="127.0" mnemonicParsing="false" onAction="#displayUserAccounts" text="Display Accounts" />
+      <Button id="displayButton" fx:id="displayButton" layoutX="742.0" layoutY="200.0" mnemonicParsing="false" onAction="#displayRange" prefHeight="25.0" prefWidth="88.0" text="Display" />
       <TextField fx:id="minTextBox" layoutX="741.0" layoutY="127.0" />
       <TextField fx:id="maxTextBox" layoutX="741.0" layoutY="164.0" />
       <Label layoutX="694.0" layoutY="127.0" text="Min:">
@@ -58,15 +60,14 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <Button id="displayYourAccountsButton" fx:id="displayYourAccountsButton" layoutX="14.0" layoutY="565.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="163.0" text="Display Your  Accounts" />
       <Label layoutX="366.0" layoutY="19.0" prefHeight="47.0" prefWidth="244.0" text="Manager Control">
          <font>
             <Font size="30.0" />
          </font>
       </Label>
-      <Button id="sortAccountsByBalanceButton" fx:id="sortAccountsByBalanceButton" layoutX="14.0" layoutY="158.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="163.0" text="Sort Accounts By Balance" />
-      <Button id="displayOnlyActiveAccountsButton" fx:id="displayOnlyActiveAccountsButton" layoutX="14.0" layoutY="253.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="173.0" text="Display only Active Accounts" />
-      <Button id="sortUsersByNameButton" fx:id="sortUsersByNameButton" layoutX="14.0" layoutY="206.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="163.0" text="Sort Users by Name" />
-      <Button id="displayYourTransactionsButton" layoutX="14.0" layoutY="479.0" mnemonicParsing="false" onAction="#viewInterest" prefHeight="37.0" prefWidth="163.0" text="Display Your  Transactions" />
+      <Button id="sortAccountsByBalanceButton" fx:id="sortAccountsByBalanceButton" layoutX="14.0" layoutY="469.0" mnemonicParsing="false" onAction="#sortAccountsByBalance" prefHeight="37.0" prefWidth="163.0" text="Sort Accounts By Balance" />
+      <Button id="displayOnlyActiveAccountsButton" fx:id="displayOnlyActiveAccountsButton" layoutX="14.0" layoutY="565.0" mnemonicParsing="false" onAction="#displayOnlyActiveAccounts" prefHeight="37.0" prefWidth="173.0" text="Display only Active Accounts" />
+      <Button id="sortUsersByNameButton" fx:id="sortUsersByNameButton" layoutX="14.0" layoutY="517.0" mnemonicParsing="false" onAction="#sortUsersByName" prefHeight="37.0" prefWidth="163.0" text="Sort Users by Name" />
+      <Button id="displayAllUsersButton" layoutX="14.0" layoutY="429.0" mnemonicParsing="false" onAction="#displayAccounts" prefHeight="37.0" prefWidth="136.0" text="Display All Accounts" />
    </children>
 </AnchorPane>

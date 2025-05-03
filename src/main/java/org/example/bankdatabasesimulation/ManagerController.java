@@ -13,10 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 
 import java.net.URL;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ManagerController implements Initializable {
@@ -115,8 +112,7 @@ public class ManagerController implements Initializable {
     @FXML
     void displayAccounts(ActionEvent event) {
         try {
-            int userId = Integer.parseInt(accountIdTextBox.getText());
-            DatabaseHelper.getAllAccounts(userId);
+            accountTable.setItems(FXCollections.observableArrayList(DatabaseHelper.getEveryAccount()));
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -157,7 +153,12 @@ public class ManagerController implements Initializable {
 
     @FXML
     void displayOnlyActiveAccounts(ActionEvent event) {
+        List<Account> accounts = DatabaseHelper.getEveryAccount();
+        accounts = accounts.stream()
+                .filter(account -> account.getStatus().equals(Status.ACTIVE))
+                .collect(Collectors.toList());
 
+        accountTable.setItems(FXCollections.observableArrayList(accounts));
     }
 
     @FXML
@@ -255,7 +256,12 @@ public class ManagerController implements Initializable {
 
     @FXML
     void sortAccountsByBalance(ActionEvent event) {
+        List<Account> accounts = DatabaseHelper.getEveryAccount();
+        accounts = accounts.stream()
+                .sorted(Comparator.comparing(account -> account.getBalance()))
+                .collect(Collectors.toList());
 
+        accountTable.setItems(FXCollections.observableArrayList(accounts));
     }
 
     @FXML

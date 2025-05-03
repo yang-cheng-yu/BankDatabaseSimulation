@@ -46,7 +46,7 @@ public class ManagerSelectController implements Initializable{
             List<Transaction> data = DatabaseHelper.getAllTransactions();
             controller.setTransaction(data);
 
-            Scene scene = new Scene(root, 933, 619);
+            Scene scene = new Scene(root, 600, 400);
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.show();
@@ -89,7 +89,7 @@ public class ManagerSelectController implements Initializable{
     void manageSystem(ActionEvent event) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("manager-client.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+            Scene scene = new Scene(fxmlLoader.load(), 933, 619);
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.show();

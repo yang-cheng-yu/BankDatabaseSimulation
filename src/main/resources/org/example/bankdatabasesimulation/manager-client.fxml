@@ -68,6 +68,6 @@
       <Button id="sortAccountsByBalanceButton" fx:id="sortAccountsByBalanceButton" layoutX="14.0" layoutY="469.0" mnemonicParsing="false" onAction="#sortAccountsByBalance" prefHeight="37.0" prefWidth="163.0" text="Sort Accounts By Balance" />
       <Button id="displayOnlyActiveAccountsButton" fx:id="displayOnlyActiveAccountsButton" layoutX="14.0" layoutY="565.0" mnemonicParsing="false" onAction="#displayOnlyActiveAccounts" prefHeight="37.0" prefWidth="173.0" text="Display only Active Accounts" />
       <Button id="sortUsersByNameButton" fx:id="sortUsersByNameButton" layoutX="14.0" layoutY="517.0" mnemonicParsing="false" onAction="#sortUsersByName" prefHeight="37.0" prefWidth="163.0" text="Sort Users by Name" />
-      <Button id="displayAllUsersButton" layoutX="14.0" layoutY="429.0" mnemonicParsing="false" onAction="#displayAccounts" prefHeight="37.0" prefWidth="136.0" text="Display All Accounts" />
+      <Button id="displayAllUsersButton" fx:id="displayAllAccountsButton" layoutX="14.0" layoutY="429.0" mnemonicParsing="false" onAction="#displayAccounts" prefHeight="37.0" prefWidth="136.0" text="Display All Accounts" />
    </children>
 </AnchorPane>

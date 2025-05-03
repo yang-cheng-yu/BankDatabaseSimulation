@@ -62,6 +62,11 @@ public class CustomerController implements Initializable {
     }
 
     @FXML
+    void viewInterest(ActionEvent event) {
+
+    }
+
+    @FXML
     void send(ActionEvent event) {
         double money = Integer.parseInt(sendAmountTextField.getText());
         String email = sendemailTextField.getText();

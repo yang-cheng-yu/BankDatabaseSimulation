@@ -100,15 +100,6 @@ public class ManagerController {
     @FXML
     private Button withdrawButton;
 
-    @FXML
-    void createAccount(ActionEvent event) {
-
-    }
-
-    @FXML
-    void deposit(ActionEvent event) {
-
-    }
 
     @FXML
     void displayAccounts(ActionEvent event) {
@@ -231,10 +222,7 @@ public class ManagerController {
 
     }
 
-    @FXML
-    void send(ActionEvent event) {
 
-    }
 
     @FXML
     void sortAccountsByBalance(ActionEvent event) {
@@ -247,7 +235,7 @@ public class ManagerController {
     }
 
     @FXML
-    void withdraw(ActionEvent event) {
+    void viewInterest(ActionEvent event) {
 
     }
 }

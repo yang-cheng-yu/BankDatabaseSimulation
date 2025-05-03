@@ -67,5 +67,6 @@
       <Button id="sortAccountsByBalanceButton" fx:id="sortAccountsByBalanceButton" layoutX="14.0" layoutY="158.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="163.0" text="Sort Accounts By Balance" />
       <Button id="displayOnlyActiveAccountsButton" fx:id="displayOnlyActiveAccountsButton" layoutX="14.0" layoutY="253.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="173.0" text="Display only Active Accounts" />
       <Button id="sortUsersByNameButton" fx:id="sortUsersByNameButton" layoutX="14.0" layoutY="206.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="163.0" text="Sort Users by Name" />
+      <Button id="displayYourTransactionsButton" layoutX="14.0" layoutY="479.0" mnemonicParsing="false" onAction="#viewInterest" prefHeight="37.0" prefWidth="163.0" text="Display Your  Transactions" />
    </children>
 </AnchorPane>

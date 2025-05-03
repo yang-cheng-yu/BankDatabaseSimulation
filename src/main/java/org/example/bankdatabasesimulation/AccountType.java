@@ -13,7 +13,7 @@ public class AccountType {
 
     public static final AccountType DEBIT = new AccountType(1,"Debit Account",0.002);
     public static final AccountType CREDIT = new AccountType(2,"Credit Account",0.01);
-    public static final AccountType INVESTMENT = new AccountType(3,"Investment Account",0.8);
+    public static final AccountType INVESTMENT = new AccountType(3,"Investment Account",0.08);
 
     public int getAccTypeId() {
         return accTypeId;

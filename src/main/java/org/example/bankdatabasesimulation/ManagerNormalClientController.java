@@ -3,11 +3,17 @@ package org.example.bankdatabasesimulation;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ManagerNormalClientController implements Initializable {
@@ -59,14 +65,14 @@ public class ManagerNormalClientController implements Initializable {
 
     @FXML
     void deposit(ActionEvent event) {
-        double money = Integer.parseInt(transactionAmountTextField.getText());
+        double money = Double.parseDouble(transactionAmountTextField.getText());
         DatabaseHelper.deposit(DataSingleton.getInstance().getCurrentAccount().getAccountType(),money);
         updateBalance();
     }
 
     @FXML
     void send(ActionEvent event) {
-        double money = Integer.parseInt(sendAmountTextField.getText());
+        double money = Double.parseDouble(sendAmountTextField.getText());
         String email = sendemailTextField.getText();
         DatabaseHelper.transfer(DataSingleton.getInstance().getCurrentAccount().getAccountType(),money,email,AccountType.DEBIT);
         updateBalance();
@@ -74,7 +80,7 @@ public class ManagerNormalClientController implements Initializable {
 
     @FXML
     void withdraw(ActionEvent event) {
-        double money = Integer.parseInt(transactionAmountTextField.getText());
+        double money = Double.parseDouble(transactionAmountTextField.getText());
         DatabaseHelper.withdraw(DataSingleton.getInstance().getCurrentAccount().getAccountType(),money);
         updateBalance();
     }
@@ -83,6 +89,28 @@ public class ManagerNormalClientController implements Initializable {
     void displayTransactions(ActionEvent event) {
         managerTable.setItems(FXCollections.observableArrayList(DatabaseHelper.getCurrentTransactions()));
     }
+
+    @FXML
+    void viewInterest(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("displayInterest.fxml"));
+            Parent root = loader.load();
+
+            DisplayInterestController controller = loader.getController();
+            List<InterestObject> data = DatabaseHelper.viewInterest(DataSingleton.getInstance().getCurrentAccount());
+            controller.setInterest(data);
+
+            Scene scene = new Scene(root, 600, 400);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.show();
+            Stage window = (Stage) accountBalanceLabel.getScene().getWindow();
+            window.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void updateBalance(){
         double money = DataSingleton.getInstance().getCurrentAccount().getBalance();
         String temp =String.valueOf(money);

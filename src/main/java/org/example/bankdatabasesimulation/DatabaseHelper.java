@@ -507,7 +507,7 @@ public class DatabaseHelper {
                 int status = rs.getInt("status");
 
                 if (status == 1){
-                    System.err.println("can't deposit from frozen account");
+                    System.err.println("can't withdraw from frozen account");
                     return;
                 }
 

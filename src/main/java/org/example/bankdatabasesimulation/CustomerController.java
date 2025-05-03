@@ -3,11 +3,16 @@ package org.example.bankdatabasesimulation;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
@@ -51,7 +56,7 @@ public class CustomerController implements Initializable {
 
     @FXML
     void deposit(ActionEvent event) {
-        double money = Integer.parseInt(transactionAmoundTextField.getText());
+        double money = Double.parseDouble(transactionAmoundTextField.getText());
         DatabaseHelper.deposit(DataSingleton.getInstance().getCurrentAccount().getAccountType(),money);
         updateBalance();
     }
@@ -63,12 +68,28 @@ public class CustomerController implements Initializable {
 
     @FXML
     void viewInterest(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("displayInterest.fxml"));
+            Parent root = loader.load();
 
+            DisplayInterestController controller = loader.getController();
+            List<InterestObject> data = DatabaseHelper.viewInterest(DataSingleton.getInstance().getCurrentAccount());
+            controller.setInterest(data);
+
+            Scene scene = new Scene(root, 600, 400);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.show();
+            Stage window = (Stage) accountBalanceLabel.getScene().getWindow();
+            window.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
     void send(ActionEvent event) {
-        double money = Integer.parseInt(sendAmountTextField.getText());
+        double money = Double.parseDouble(sendAmountTextField.getText());
         String email = sendemailTextField.getText();
         DatabaseHelper.transfer(DataSingleton.getInstance().getCurrentAccount().getAccountType(),money,email,AccountType.DEBIT);
         updateBalance();
@@ -76,7 +97,7 @@ public class CustomerController implements Initializable {
 
     @FXML
     void withdraw(ActionEvent event) {
-        double money = Integer.parseInt(transactionAmoundTextField.getText());
+        double money = Double.parseDouble(transactionAmoundTextField.getText());
         DatabaseHelper.withdraw(DataSingleton.getInstance().getCurrentAccount().getAccountType(),money);
         updateBalance();
     }

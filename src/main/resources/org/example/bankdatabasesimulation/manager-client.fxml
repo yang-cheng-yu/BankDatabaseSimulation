@@ -11,9 +11,9 @@
 
 <AnchorPane prefHeight="619.0" prefWidth="933.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.bankdatabasesimulation.ManagerController">
    <children>
-      <HBox fx:id="tableContainer" layoutX="367.0" layoutY="344.0" prefHeight="258.0" prefWidth="553.0">
+      <HBox fx:id="tableContainer" layoutX="232.0" layoutY="255.0" prefHeight="347.0" prefWidth="688.0">
          <children>
-            <TableView fx:id="managerTable" prefHeight="258.0" prefWidth="754.0">
+            <TableView fx:id="managerTable" prefHeight="347.0" prefWidth="716.0">
               <columns>
                 <TableColumn prefWidth="75.0" text="C1" />
                 <TableColumn prefWidth="75.0" text="C2" />

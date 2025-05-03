@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -36,8 +37,8 @@ public class CustomerSelectController implements Initializable {
         refreshAccounts();
 
         List<AccountType> typeList = new ArrayList<>();
-        typeList.add(AccountType.CREDIT);
         typeList.add(AccountType.DEBIT);
+        typeList.add(AccountType.CREDIT);
         typeList.add(AccountType.INVESTMENT);
         accountTypeComboBox.setItems(FXCollections.observableArrayList(typeList));
 
@@ -45,7 +46,23 @@ public class CustomerSelectController implements Initializable {
 
     @FXML
     void viewAllTransactions(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("displayTransactions.fxml"));
+            Parent root = loader.load();
 
+            DisplayTransactionController controller = loader.getController();
+            List<Transaction> data = DatabaseHelper.getAllTransactions();
+            controller.setTransaction(data);
+
+            Scene scene = new Scene(root, 600, 400);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.show();
+            Stage window = (Stage) createAccountButton.getScene().getWindow();
+            window.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void refreshAccounts() {

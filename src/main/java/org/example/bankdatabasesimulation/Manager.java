@@ -17,7 +17,23 @@ public class Manager extends User {
         this.managerId = managerId;
     }
 
-    public Manager(int userId, String fName, String lName, String email, String phoneNum, Date dob, String address) {
-        super();
+
+    public Manager(int userId, int managerId, String accountPass, String fName, String lName, String email, String phoneNum, Date dob, String address) {
+        super(userId, accountPass, fName, lName, email, phoneNum, dob, address);
+        this.managerId = managerId;
+    }
+    @Override
+    public String toString() {
+        return "Manager{" +
+                "managerId=" + managerId +
+                ", userId=" + userId +
+                ", accountPass='" + accountPass + '\'' +
+                ", fName='" + fName + '\'' +
+                ", lName='" + lName + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNum='" + phoneNum + '\'' +
+                ", DOB=" + DOB +
+                ", address='" + address + '\'' +
+                '}';
     }
 }

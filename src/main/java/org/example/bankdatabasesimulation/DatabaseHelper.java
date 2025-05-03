@@ -1,4 +1,6 @@
 package org.example.bankdatabasesimulation;
+import javafx.scene.control.Alert;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -389,6 +391,7 @@ public class DatabaseHelper {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()){
                     int userId = rs.getInt("userId");
+                    String pass = rs.getString("accountPass");
                     String fName = rs.getString("fName");
                     String lName = rs.getString("lName");
                     String phoneNum = rs.getString("phoneNum");
@@ -401,15 +404,27 @@ public class DatabaseHelper {
 
                         try (ResultSet rs2 = ps2.executeQuery()) {
                             if (rs2.next()) {
+                                int customerId = rs2.getInt("customerId");
                                 // It's a customer
-                                Customer customer = new Customer(userId, fName, lName, email, phoneNum, dob, address);
+                                Customer customer = new Customer(userId,customerId,pass ,fName, lName, email, phoneNum, dob, address);
                                 DataSingleton.getInstance().setCurrentUser(customer);
+                                System.out.println(DataSingleton.getInstance().getCurrentUser());
                                 return true;
                             } else {
                                 // Otherwise, it's a manager
-                                Manager manager = new Manager(userId, fName, lName, email, phoneNum, dob, address);
-                                DataSingleton.getInstance().setCurrentUser(manager);
-                                return true;
+                                String sql3 = "SELECT * FROM managers WHERE userId = ? LIMIT 1";
+                                try (PreparedStatement ps3 = connection.prepareStatement(sql3)){
+                                    ps3.setInt(1,userId);
+                                    try (ResultSet rs3 = ps3.executeQuery()) {
+                                        if (rs3.next()) {
+                                            int managerId = rs3.getInt("managerId");
+                                            Manager manager = new Manager(userId,managerId,pass,fName,lName,email,phoneNum,dob,address);
+                                            DataSingleton.getInstance().setCurrentUser(manager);
+                                            System.out.println(DataSingleton.getInstance().getCurrentUser());
+                                            return true;
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -624,6 +639,7 @@ public class DatabaseHelper {
         sendMoney(money,email,receivingAccountType);
     }
     private static void sendMoney(double money, String email, AccountType receivingAccountType) {
+        System.out.println("looking for email" + email);
         String sql = """
                 SELECT userId FROM users WHERE email = ?;
                 """;
@@ -632,10 +648,11 @@ public class DatabaseHelper {
 
             ResultSet rs = select.executeQuery();
             if (rs.next()) {
+                System.out.println("found emain userId= "+rs.getInt("userId"));
                 int userId = rs.getInt("userId");
 
                 String sql2 = """
-                        SELECT accountId , balance FROM account WHERE userId = ? AND AccountTypeId = ?;
+                        SELECT accountId , balance FROM accounts WHERE userId = ? AND AccountTypeId = ?;
                         """;
                 try (PreparedStatement select2 = connection.prepareStatement(sql2)){
                     select2.setInt(1,userId);
@@ -646,7 +663,7 @@ public class DatabaseHelper {
                         double balance = result.getDouble("balance");
                         int accountId = result.getInt("accountId");
 
-                        balance += money;
+                        balance = balance + money;
 
                         String sql3 = """
                                 UPDATE accounts SET balance = ?
@@ -656,18 +673,26 @@ public class DatabaseHelper {
                             select3.setDouble(1,balance);
                             select3.setInt(2,userId);
                             select3.setInt(3,receivingAccountType.getAccTypeId());
-                            select3.executeUpdate();
 
-                            createTransaction(accountId,money,"Deposit");
 
                             int rowsAffected = select3.executeUpdate();
                             if (rowsAffected > 0) {
+                                createTransaction(accountId,money,"Deposit");
                                 System.out.println("Money sent Successfuly");
 
                             } else {
                                 System.err.println("Transaction failed");
                             }
                         }
+                    } else {
+                        System.err.println("The receiver does not have an account of type: " + receivingAccountType);
+                        javafx.application.Platform.runLater(() -> {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Transfer Failed");
+                            alert.setHeaderText("Recipient Missing Account");
+                            alert.setContentText("The recipient does not have a " + receivingAccountType + " account.");
+                            alert.showAndWait();
+                        });
                     }
                 }
             }

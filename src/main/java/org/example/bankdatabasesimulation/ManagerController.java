@@ -245,6 +245,7 @@ public class ManagerController implements Initializable {
 
             DisplayTransactionController controller = loader.getController();
             List<Transaction> data = DatabaseHelper.getAllTransactions(userId);
+            controller.setName("manager-client.fxml");
             controller.setTransaction(data);
 
             Scene scene = new Scene(root, 600, 400);

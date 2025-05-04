@@ -52,6 +52,7 @@ public class CustomerSelectController implements Initializable {
 
             DisplayTransactionController controller = loader.getController();
             List<Transaction> data = DatabaseHelper.getAllTransactions();
+            controller.setName("customer-select.fxml");
             controller.setTransaction(data);
 
             Scene scene = new Scene(root, 600, 400);

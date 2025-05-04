@@ -44,6 +44,7 @@ public class ManagerSelectController implements Initializable{
 
             DisplayTransactionController controller = loader.getController();
             List<Transaction> data = DatabaseHelper.getAllTransactions();
+            controller.setName("manager-select.fxml");
             controller.setTransaction(data);
 
             Scene scene = new Scene(root, 600, 400);

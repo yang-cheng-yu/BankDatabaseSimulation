@@ -37,10 +37,11 @@ public class DisplayTransactionController implements Initializable {
     @FXML
     private TableView<Transaction> transactionTable;
 
+    private String name;
     @FXML
     void goBack(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("customer-select.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource(name));
             Scene scene = new Scene(fxmlLoader.load(), 600, 400);
             Stage stage = new Stage();
             stage.setScene(scene);
@@ -63,6 +64,14 @@ public class DisplayTransactionController implements Initializable {
 
     public void setTransaction(List<Transaction> transaction) {
         transactionTable.setItems(FXCollections.observableArrayList(transaction));
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
 

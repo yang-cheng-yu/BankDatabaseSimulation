@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Locale;
 
 public class DataSingleton {
     private ObservableList<User> users;
@@ -14,6 +15,7 @@ public class DataSingleton {
     private static Connection connection;
     private User currentUser;
     private Account currentAccount;
+    private Locale lang;
 
     private DataSingleton() {
     }
@@ -54,5 +56,13 @@ public class DataSingleton {
 
     public void setCurrentAccount(Account currentAccount) {
         this.currentAccount = currentAccount;
+    }
+
+    public Locale getLang() {
+        return lang;
+    }
+
+    public void setLang(Locale lang) {
+        this.lang = lang;
     }
 }

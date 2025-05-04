@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Locale;
 
 public class Application extends javafx.application.Application {
     @Override
@@ -17,6 +18,7 @@ public class Application extends javafx.application.Application {
     }
 
     public static void main(String[] args) {
+        DataSingleton.getInstance().setLang(Locale.CANADA);
         launch();
     }
 }

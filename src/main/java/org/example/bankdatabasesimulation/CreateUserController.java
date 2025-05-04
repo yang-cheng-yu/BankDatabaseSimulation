@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class CreateUserController implements Initializable {
@@ -76,6 +77,11 @@ public class CreateUserController implements Initializable {
     private ToggleGroup userToggleGroup;
 
     @FXML
+    private Button langButton;
+
+    private DataSingleton data;
+
+    @FXML
     void createUser(ActionEvent event) {
         try {
             Toggle userType = userToggleGroup.getSelectedToggle();
@@ -136,6 +142,36 @@ public class CreateUserController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        data = DataSingleton.getInstance();
 
+        String langText = (data.getLang().equals(Locale.CANADA)) ? "FR" : "EN";
+        langButton.setText(langText);
+
+        updateLang();
+    }
+
+    private void updateLang() {
+        ResourceBundle rb = ResourceBundle.getBundle("messages", data.getLang());
+
+        createUserLabel.setText(rb.getString("createUser"));
+        createUserButton.setText(rb.getString("createUser"));
+        customerRadioButton.setText(rb.getString("customer"));
+        managerRadioButton.setText(rb.getString("manager"));
+        passwordLabel.setText(rb.getString("password") + " : ");
+        fnameLabel.setText(rb.getString("fname") + " : ");
+        lnameLabel.setText(rb.getString("lname") + " : ");
+        emailLabel.setText(rb.getString("email") + " : ");
+        phoneLabel.setText(rb.getString("phone") + " : ");
+        dobLabel.setText(rb.getString("dob") + " : ");
+        addressLabel.setText(rb.getString("address") + " : ");
+        goBackButton.setText(rb.getString("goBack"));
+    }
+
+    @FXML
+    void toggleLang(ActionEvent event) {
+        data.setLang((data.getLang().equals(Locale.CANADA)) ? Locale.CANADA_FRENCH : Locale.CANADA);
+        String langText = (langButton.getText().equals("EN")) ? "FR" : "EN";
+        langButton.setText(langText);
+        updateLang();
     }
 }

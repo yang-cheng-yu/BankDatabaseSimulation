@@ -17,8 +17,6 @@ import java.util.ResourceBundle;
 
 public class ApplicationController implements Initializable {
 
-    private Locale lang;
-
     @FXML
     private TextField emailBox;
 
@@ -42,6 +40,8 @@ public class ApplicationController implements Initializable {
 
     @FXML
     private Label passwordLabel;
+
+    private DataSingleton data;
 
     @FXML
     void createCustomer(MouseEvent event) {
@@ -89,7 +89,11 @@ public class ApplicationController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        DataSingleton.getInstance();
+        data = DataSingleton.getInstance();
+
+        String langText = (data.getLang().equals(Locale.CANADA)) ? "FR" : "EN";
+        langButton.setText(langText);
+
         new DatabaseHelper();
 
         DatabaseHelper.createUsersTable();
@@ -98,13 +102,11 @@ public class ApplicationController implements Initializable {
         DatabaseHelper.createManagersTable();
         DatabaseHelper.createTransactionTable();
 
-        lang = Locale.CANADA;
-
         updateLang();
     }
 
     private void updateLang() {
-        ResourceBundle rb = ResourceBundle.getBundle("messages", lang);
+        ResourceBundle rb = ResourceBundle.getBundle("messages", data.getLang());
 
         createUserButton.setText(rb.getString("createUser"));
         loginLabel.setText(rb.getString("login"));
@@ -130,7 +132,7 @@ public class ApplicationController implements Initializable {
 
     @FXML
     void toggleLang(ActionEvent event) {
-        lang = (lang.equals(Locale.CANADA)) ? Locale.CANADA_FRENCH : Locale.CANADA;
+        data.setLang((data.getLang().equals(Locale.CANADA)) ? Locale.CANADA_FRENCH : Locale.CANADA);
         String langText = (langButton.getText().equals("EN")) ? "FR" : "EN";
         langButton.setText(langText);
         updateLang();

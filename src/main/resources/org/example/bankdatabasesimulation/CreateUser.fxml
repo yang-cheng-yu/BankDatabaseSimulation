@@ -20,43 +20,43 @@
             <ToggleGroup fx:id="userToggleGroup" />
          </toggleGroup></RadioButton>
       <RadioButton fx:id="managerRadioButton" layoutX="343.0" layoutY="77.0" mnemonicParsing="false" text="Manager" toggleGroup="$userToggleGroup" />
-      <Label fx:id="fnameLabel" layoutX="140.0" layoutY="141.0" text="First Name:">
+      <Label fx:id="fnameLabel" layoutX="140.0" layoutY="141.0" text="First Name:" textAlignment="RIGHT" AnchorPane.rightAnchor="380.0" AnchorPane.topAnchor="141.0">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
       <TextField fx:id="fNameTextField" layoutX="229.0" layoutY="141.0" prefHeight="25.0" prefWidth="188.0" />
-      <Label fx:id="lnameLabel" layoutX="141.0" layoutY="176.0" text="Last Name:">
+      <Label fx:id="lnameLabel" layoutX="141.0" layoutY="176.0" text="Last Name:" textAlignment="RIGHT" AnchorPane.rightAnchor="381.0" AnchorPane.topAnchor="176.0">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
       <TextField fx:id="lNameTextField" layoutX="229.0" layoutY="176.0" prefHeight="25.0" prefWidth="188.0" />
-      <Label fx:id="emailLabel" layoutX="177.0" layoutY="213.0" text="email:">
+      <Label fx:id="emailLabel" layoutX="177.0" layoutY="213.0" text="email:" textAlignment="RIGHT" AnchorPane.rightAnchor="381.0" AnchorPane.topAnchor="213.0">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
       <TextField fx:id="emailTextField" layoutX="229.0" layoutY="213.0" prefHeight="25.0" prefWidth="188.0" />
-      <Label fx:id="phoneLabel" layoutX="112.0" layoutY="250.0" text="Phone Number:">
+      <Label fx:id="phoneLabel" layoutX="112.0" layoutY="250.0" text="Phone Number:" textAlignment="RIGHT" AnchorPane.rightAnchor="377.0" AnchorPane.topAnchor="250.0">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
       <TextField fx:id="phoneNumTextField" layoutX="229.0" layoutY="250.0" prefHeight="25.0" prefWidth="188.0" />
-      <Label fx:id="dobLabel" layoutX="130.0" layoutY="285.0" text="Date of Birth:">
+      <Label fx:id="dobLabel" layoutX="130.0" layoutY="285.0" text="Date of Birth:" textAlignment="RIGHT" AnchorPane.rightAnchor="377.0" AnchorPane.topAnchor="285.0">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
       <TextField fx:id="dateBirthTextField" layoutX="229.0" layoutY="285.0" prefHeight="25.0" prefWidth="188.0" />
-      <Label fx:id="addressLabel" layoutX="157.0" layoutY="320.0" text="Address:">
+      <Label fx:id="addressLabel" layoutX="157.0" layoutY="320.0" text="Address:" textAlignment="RIGHT" AnchorPane.rightAnchor="382.0" AnchorPane.topAnchor="320.0">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
       <TextField fx:id="addressTextField" layoutX="229.0" layoutY="320.0" prefHeight="25.0" prefWidth="188.0" />
-      <Button fx:id="createUserButton" layoutX="475.0" layoutY="332.0" mnemonicParsing="false" onAction="#createUser" prefHeight="45.0" prefWidth="111.0" text="Create User">
+      <Button fx:id="createUserButton" layoutX="423.0" layoutY="332.0" mnemonicParsing="false" onAction="#createUser" prefHeight="45.0" prefWidth="173.0" text="Create User">
          <font>
             <Font size="16.0" />
          </font>
@@ -67,10 +67,11 @@
          </font>
       </Button>
       <TextField fx:id="passTextField" layoutX="229.0" layoutY="106.0" prefHeight="25.0" prefWidth="188.0" />
-      <Label fx:id="passwordLabel" layoutX="152.0" layoutY="106.0" text="Password:">
+      <Label fx:id="passwordLabel" layoutX="152.0" layoutY="106.0" text="Password:" textAlignment="RIGHT" AnchorPane.rightAnchor="377.0" AnchorPane.topAnchor="106.0">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
+      <Button fx:id="langButton" layoutX="59.0" layoutY="33.0" mnemonicParsing="false" onAction="#toggleLang" text="FR" />
    </children>
 </AnchorPane>

@@ -6,18 +6,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class ApplicationController implements Initializable {
+
+    private Locale lang;
 
     @FXML
     private TextField emailBox;
@@ -32,12 +32,21 @@ public class ApplicationController implements Initializable {
     private Button loginButton;
 
     @FXML
-    private Button createCustomerButton;
+    private Button langButton;
+
+    @FXML
+    private Label emailLabel;
+
+    @FXML
+    private Label loginLabel;
+
+    @FXML
+    private Label passwordLabel;
 
     @FXML
     void createCustomer(MouseEvent event) {
         DatabaseHelper.insertCustomer("customer", "customer", "customer", "customer@example.com", "999-999-9999", System.currentTimeMillis(), "123 Dummy-Address st.");
-        createCustomerButton.setVisible(false);
+        createUserButton.setVisible(false);
     }
 
     @FXML
@@ -88,6 +97,20 @@ public class ApplicationController implements Initializable {
         DatabaseHelper.createCustomersTable();
         DatabaseHelper.createManagersTable();
         DatabaseHelper.createTransactionTable();
+
+        lang = Locale.CANADA;
+
+        updateLang();
+    }
+
+    private void updateLang() {
+        ResourceBundle rb = ResourceBundle.getBundle("messages", lang);
+
+        createUserButton.setText(rb.getString("createUser"));
+        loginLabel.setText(rb.getString("login"));
+        emailLabel.setText(rb.getString("email") + " : ");
+        passwordLabel.setText(rb.getString("password") + " : ");
+        loginButton.setText(rb.getString("login"));
     }
 
     @FXML
@@ -103,5 +126,13 @@ public class ApplicationController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @FXML
+    void toggleLang(ActionEvent event) {
+        lang = (lang.equals(Locale.CANADA)) ? Locale.CANADA_FRENCH : Locale.CANADA;
+        String langText = (langButton.getText().equals("EN")) ? "FR" : "EN";
+        langButton.setText(langText);
+        updateLang();
     }
 }

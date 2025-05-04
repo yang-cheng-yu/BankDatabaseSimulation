@@ -3,14 +3,20 @@ package org.example.bankdatabasesimulation;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class CreateUserController {
+public class CreateUserController implements Initializable {
+
+    @FXML
+    private Label addressLabel;
 
     @FXML
     private TextField addressTextField;
@@ -19,10 +25,19 @@ public class CreateUserController {
     private Button createUserButton;
 
     @FXML
+    private Label createUserLabel;
+
+    @FXML
     private RadioButton customerRadioButton;
 
     @FXML
     private TextField dateBirthTextField;
+
+    @FXML
+    private Label dobLabel;
+
+    @FXML
+    private Label emailLabel;
 
     @FXML
     private TextField emailTextField;
@@ -31,22 +46,34 @@ public class CreateUserController {
     private TextField fNameTextField;
 
     @FXML
+    private Label fnameLabel;
+
+    @FXML
     private Button goBackButton;
 
     @FXML
     private TextField lNameTextField;
 
     @FXML
+    private Label lnameLabel;
+
+    @FXML
     private RadioButton managerRadioButton;
+
+    @FXML
+    private TextField passTextField;
+
+    @FXML
+    private Label passwordLabel;
+
+    @FXML
+    private Label phoneLabel;
 
     @FXML
     private TextField phoneNumTextField;
 
     @FXML
     private ToggleGroup userToggleGroup;
-
-    @FXML
-    private TextField passTextField;
 
     @FXML
     void createUser(ActionEvent event) {
@@ -105,5 +132,10 @@ public class CreateUserController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
     }
 }

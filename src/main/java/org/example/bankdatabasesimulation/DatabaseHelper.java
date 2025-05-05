@@ -473,7 +473,7 @@ public class DatabaseHelper {
         return false;
     }
 
-    private static int computeStatus(AccountType accountType, double balance) {
+    public static int computeStatus(AccountType accountType, double balance) {
         if (balance < 0) {
             return 2;
         } else if (accountType.equals(AccountType.INVESTMENT)) {

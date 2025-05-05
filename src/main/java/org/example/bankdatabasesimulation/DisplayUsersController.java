@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -21,6 +22,13 @@ import java.util.stream.Collectors;
 public class DisplayUsersController implements Initializable {
 
     public TableView<User> userTable;
+    public Button sortButton;
+    public Button goBackButton;
+    public Button filterMButton;
+    public Button filterCButton;
+    public Button resetButton;
+    public Button langButton;
+    public Label usersTitleLabel;
     @FXML
     private TableColumn<User, String> addressCol;
 
@@ -47,6 +55,8 @@ public class DisplayUsersController implements Initializable {
 
     @FXML
     private TableColumn<User, Integer> userIdCol;
+
+    private DataSingleton data;
 
     @FXML
     void filterManagers(ActionEvent event) {
@@ -85,6 +95,14 @@ public class DisplayUsersController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        data = DataSingleton.getInstance();
+
+
+
+        String langText = (data.getLang().equals(Locale.CANADA)) ? "FR" : "EN";
+        langButton.setText(langText);
+
+
         userIdCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
         passCol.setCellValueFactory(new PropertyValueFactory<>("accountPass"));
         fnameCol.setCellValueFactory(new PropertyValueFactory<>("FName"));
@@ -102,5 +120,34 @@ public class DisplayUsersController implements Initializable {
     public void filterCustomers(ActionEvent actionEvent) {
         List<User> testing =  DatabaseHelper.getAllCustomers();
         userTable.setItems(FXCollections.observableArrayList(testing));
+    }
+    private void updateLang() {
+        ResourceBundle rb = ResourceBundle.getBundle("messages", data.getLang());
+
+
+        usersTitleLabel.setText(rb.getString("userT"));
+        goBackButton.setText(rb.getString("goBack"));
+        sortButton.setText(rb.getString("sortName"));
+        filterCButton.setText(rb.getString("filterC"));
+        filterMButton.setText(rb.getString("filterM"));
+        filterMButton.setText(rb.getString("filterM"));
+        resetButton.setText(rb.getString("reset"));
+        userIdCol.setText(rb.getString("userIdCol"));
+        passCol.setText(rb.getString("password"));
+        lnameCol.setText(rb.getString("lname"));
+        fnameCol.setText(rb.getString("fname"));
+        emailCol.setText(rb.getString("email"));
+        phonenumCol.setText(rb.getString("phone"));
+        dobCol.setText(rb.getString("dobb"));
+        addressCol.setText(rb.getString("address"));
+
+    }
+
+    @FXML
+    void toggleLang(ActionEvent event) {
+        data.setLang((data.getLang().equals(Locale.CANADA)) ? Locale.CANADA_FRENCH : Locale.CANADA);
+        String langText = (langButton.getText().equals("EN")) ? "FR" : "EN";
+        langButton.setText(langText);
+        updateLang();
     }
 }

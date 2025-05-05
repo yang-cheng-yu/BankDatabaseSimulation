@@ -26,14 +26,14 @@
       </HBox>
       <Button id="displayAllUsersButton" fx:id="displayAllUsersButton" layoutX="14.0" layoutY="66.0" mnemonicParsing="false" onAction="#displayallUsers" prefHeight="37.0" prefWidth="119.0" text="Display All Users" />
       <TextField fx:id="userIdTextBox" layoutX="404.0" layoutY="94.0" prefHeight="25.0" prefWidth="182.0" />
-      <Label id="userIdLabel" layoutX="337.0" layoutY="94.0" text="User ID:">
+      <Label id="userIdLabel" fx:id="userIdLabel" layoutX="337.0" layoutY="94.0" text="User ID:">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
       <Button id="displayTransactionButton" fx:id="displayTransactionButton" layoutX="462.0" layoutY="127.0" mnemonicParsing="false" onAction="#displayUserTransaction" text="Display Transactions" />
       <TextField fx:id="accountIdTextBox" layoutX="404.0" layoutY="176.0" prefHeight="25.0" prefWidth="182.0" />
-      <Label id="AccountIdLabel" layoutX="309.0" layoutY="176.0" text="Account ID:">
+      <Label id="AccountIdLabel" fx:id="accountIdLabel" layoutX="309.0" layoutY="176.0" text="Account ID:">
          <font>
             <Font size="16.0" />
          </font>
@@ -43,22 +43,22 @@
       <Button id="displayButton" fx:id="displayButton" layoutX="742.0" layoutY="200.0" mnemonicParsing="false" onAction="#displayRange" prefHeight="25.0" prefWidth="88.0" text="Display" />
       <TextField fx:id="minTextBox" layoutX="741.0" layoutY="127.0" />
       <TextField fx:id="maxTextBox" layoutX="741.0" layoutY="164.0" />
-      <Label layoutX="694.0" layoutY="127.0" text="Min:">
+      <Label fx:id="minLabel" layoutX="694.0" layoutY="127.0" text="Min:">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Label layoutX="692.0" layoutY="164.0" text="Max:">
+      <Label fx:id="maxLabel" layoutX="692.0" layoutY="164.0" text="Max:">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Label id="accountBalanceRangeLabel" layoutX="669.0" layoutY="94.0" text="Filter Accounts by Balance Range">
+      <Label id="accountBalanceRangeLabel" fx:id="filterLabel" layoutX="669.0" layoutY="94.0" text="Filter Accounts by Balance Range">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Label layoutX="366.0" layoutY="19.0" prefHeight="47.0" prefWidth="244.0" text="Manager Control">
+      <Label fx:id="managerLabel" layoutX="366.0" layoutY="19.0" prefHeight="47.0" prefWidth="244.0" text="Manager Control">
          <font>
             <Font size="30.0" />
          </font>
@@ -66,5 +66,6 @@
       <Button id="sortAccountsByBalanceButton" fx:id="sortAccountsByBalanceButton" layoutX="14.0" layoutY="346.0" mnemonicParsing="false" onAction="#sortAccountsByBalance" prefHeight="37.0" prefWidth="163.0" text="Sort Accounts By Balance" />
       <Button id="displayOnlyActiveAccountsButton" fx:id="displayOnlyActiveAccountsButton" layoutX="14.0" layoutY="302.0" mnemonicParsing="false" onAction="#displayOnlyActiveAccounts" prefHeight="37.0" prefWidth="173.0" text="Display only Active Accounts" />
       <Button id="displayAllUsersButton" fx:id="displayAllAccountsButton" layoutX="14.0" layoutY="255.0" mnemonicParsing="false" onAction="#displayAccounts" prefHeight="37.0" prefWidth="136.0" text="Display All Accounts" />
+      <Button fx:id="langButton" layoutX="14.0" layoutY="30.0" mnemonicParsing="false" onAction="#toggleLang" text="FR" />
    </children>
 </AnchorPane>

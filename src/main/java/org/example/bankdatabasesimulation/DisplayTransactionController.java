@@ -6,6 +6,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -15,10 +17,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class DisplayTransactionController implements Initializable {
 
+    public Button goBackButton;
+    public Button langButton;
+    public Label tranTitleLabel;
     @FXML
     private TableColumn<Transaction, Integer> accountIdCol;
 
@@ -36,6 +42,8 @@ public class DisplayTransactionController implements Initializable {
 
     @FXML
     private TableView<Transaction> transactionTable;
+
+    private DataSingleton data;
 
     private String name;
     @FXML
@@ -55,6 +63,13 @@ public class DisplayTransactionController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        data = DataSingleton.getInstance();
+
+
+
+        String langText = (data.getLang().equals(Locale.CANADA)) ? "FR" : "EN";
+        langButton.setText(langText);
+
         tranIdCol.setCellValueFactory(new PropertyValueFactory<>("transactionId"));
         accountIdCol.setCellValueFactory(new PropertyValueFactory<>("accountId"));
         tranAmountCol.setCellValueFactory(new PropertyValueFactory<>("tranAmount"));
@@ -64,6 +79,26 @@ public class DisplayTransactionController implements Initializable {
 
     public void setTransaction(List<Transaction> transaction) {
         transactionTable.setItems(FXCollections.observableArrayList(transaction));
+    }
+
+    private void updateLang() {
+        ResourceBundle rb = ResourceBundle.getBundle("messages", data.getLang());
+
+
+        tranTitleLabel.setText(rb.getString("interestT"));
+        goBackButton.setText(rb.getString("goBack"));
+        tranIdCol.setText(rb.getString("tranId"));
+        accountIdCol.setText(rb.getString("accId"));
+        tranAmountCol.setText(rb.getString("amountCol"));
+
+    }
+
+    @FXML
+    void toggleLang(ActionEvent event) {
+        data.setLang((data.getLang().equals(Locale.CANADA)) ? Locale.CANADA_FRENCH : Locale.CANADA);
+        String langText = (langButton.getText().equals("EN")) ? "FR" : "EN";
+        langButton.setText(langText);
+        updateLang();
     }
 
     public String getName() {

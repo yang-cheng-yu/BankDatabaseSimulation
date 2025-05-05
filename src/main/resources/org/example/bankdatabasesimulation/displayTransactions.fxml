@@ -7,10 +7,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.bankdatabasesimulation.DisplayTransactionController">
    <children>
-      <Label layoutX="166.0" layoutY="24.0" text="Display Transactions">
+      <Label fx:id="tranTitleLabel" layoutX="166.0" layoutY="24.0" text="Display Transactions">
          <font>
             <Font size="30.0" />
          </font>
@@ -24,6 +23,7 @@
             <TableColumn fx:id="dateCol" prefWidth="75.0" text="Date" />
         </columns>
       </TableView>
-      <Button layoutX="503.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" prefHeight="35.0" prefWidth="78.0" text="Go Back" />
+      <Button fx:id="goBackButton" layoutX="503.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" prefHeight="35.0" prefWidth="78.0" text="Go Back" />
+      <Button fx:id="langButton" layoutX="14.0" layoutY="34.0" mnemonicParsing="false" onAction="#toggleLang" text="FR" />
    </children>
 </AnchorPane>

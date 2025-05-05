@@ -29,6 +29,14 @@ public class ManagerController implements Initializable {
     public TableColumn<Account, AccountType> accountTypeCol;
     public TableColumn<Account, Double> balanceCol;
     public TableColumn<Account, Integer> statusCol;
+    public Button langButton;
+    public Button displayAllAccountsButton;
+    public Label managerLabel;
+    public Label filterLabel;
+    public Label maxLabel;
+    public Label minLabel;
+    public Label accountIdLabel;
+    public Label userIdLabel;
     @FXML
     private HBox tableContainer;
 
@@ -113,6 +121,7 @@ public class ManagerController implements Initializable {
     @FXML
     private Button withdrawButton;
 
+    private DataSingleton data;
 
     @FXML
     void displayAccounts(ActionEvent event) {
@@ -279,11 +288,49 @@ public class ManagerController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        data = DataSingleton.getInstance();
+
+
+
+        String langText = (data.getLang().equals(Locale.CANADA)) ? "FR" : "EN";
+        langButton.setText(langText);
+
         accountIdCol.setCellValueFactory(new PropertyValueFactory<>("accountId"));
         userIdCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
         accountTypeCol.setCellValueFactory(new PropertyValueFactory<>("accountTypeDescription"));
         balanceCol.setCellValueFactory(new PropertyValueFactory<>("balance"));
         statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
+    }
+
+    private void updateLang() {
+        ResourceBundle rb = ResourceBundle.getBundle("messages", data.getLang());
+
+
+        managerLabel.setText(rb.getString("managerClient"));
+        filterLabel.setText(rb.getString("filter"));
+        displayAccountsButton.setText(rb.getString("displayAcc"));
+        displayTransactionButton.setText(rb.getString("displayTran"));
+        displayAllUsersButton.setText(rb.getString("displayU"));
+        displayAllAccountsButton.setText(rb.getString("displayAAcc"));
+        displayOnlyActiveAccountsButton.setText(rb.getString("displayOAC"));
+        freezeAccountButton.setText(rb.getString("freeze"));
+        sortAccountsByBalanceButton.setText(rb.getString("sortAcc"));
+        accountIdCol.setText(rb.getString("accId"));
+        userIdCol.setText(rb.getString("userIdCol"));
+        accountTypeCol.setText(rb.getString("accountTypeCol"));
+        balanceCol.setText(rb.getString("balance"));
+        statusCol.setText(rb.getString("status"));
+        displayButton.setText(rb.getString("display"));
+
+    }
+
+    @FXML
+    void toggleLang(ActionEvent event) {
+        data.setLang((data.getLang().equals(Locale.CANADA)) ? Locale.CANADA_FRENCH : Locale.CANADA);
+        String langText = (langButton.getText().equals("EN")) ? "FR" : "EN";
+        langButton.setText(langText);
+        updateLang();
     }
 }
 

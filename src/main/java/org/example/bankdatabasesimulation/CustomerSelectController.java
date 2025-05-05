@@ -17,10 +17,15 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class CustomerSelectController implements Initializable {
 
+    public Label createNewLabel;
+    public Button viewTransactionsButton;
+    public Label yourAccountsLabel;
+    public Label welcomeBackLabel;
     @FXML
     private ListView<Account> accountListBox;
 
@@ -30,12 +35,19 @@ public class CustomerSelectController implements Initializable {
     @FXML
     private Button createAccountButton;
 
+    @FXML
+    private Button langButton;
+
+    private DataSingleton data;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        DataSingleton data = DataSingleton.getInstance();
+        data = DataSingleton.getInstance();
 
         refreshAccounts();
+        String langText = (data.getLang().equals(Locale.CANADA)) ? "FR" : "EN";
+        langButton.setText(langText);
 
+        updateLang();
         List<AccountType> typeList = new ArrayList<>();
         typeList.add(AccountType.DEBIT);
         typeList.add(AccountType.CREDIT);
@@ -105,5 +117,24 @@ public class CustomerSelectController implements Initializable {
                 Platform.exit();
             });
         }
+    }
+
+    private void updateLang() {
+        ResourceBundle rb = ResourceBundle.getBundle("messages", data.getLang());
+
+        yourAccountsLabel.setText(rb.getString("yourAccounts"));
+        createNewLabel.setText(rb.getString("createNew"));
+        welcomeBackLabel.setText(rb.getString("welcomeBack"));
+        viewTransactionsButton.setText(rb.getString("viewAllAccountsTransactions"));
+        createAccountButton.setText(rb.getString("createButton"));
+        accountTypeComboBox.setPromptText(rb.getString("chooseType"));
+    }
+
+    @FXML
+    void toggleLang(ActionEvent event) {
+        data.setLang((data.getLang().equals(Locale.CANADA)) ? Locale.CANADA_FRENCH : Locale.CANADA);
+        String langText = (langButton.getText().equals("EN")) ? "FR" : "EN";
+        langButton.setText(langText);
+        updateLang();
     }
 }

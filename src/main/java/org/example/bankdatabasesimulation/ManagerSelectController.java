@@ -8,9 +8,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
+import javafx.scene.chart.PieChart;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -18,15 +17,24 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class ManagerSelectController implements Initializable{
 
+    public Label yourAccountsLabel;
+    public Label createnewLabel;
+    public Button manageSystemButton;
+    public Button viewTransactionsButton;
+    public Button createAccountButton;
+    public Label welcomeBackLabel;
+    public Button langButton;
     @FXML
     private ListView<Account> accountListView;
 
     @FXML
     private ComboBox<AccountType> accountTypeComboBox;
+    private DataSingleton data;
 
     @FXML
     void createAccount(ActionEvent event) {
@@ -110,7 +118,7 @@ public class ManagerSelectController implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        DataSingleton data = DataSingleton.getInstance();
+        data = DataSingleton.getInstance();
 
         refreshAccounts();
 
@@ -124,5 +132,24 @@ public class ManagerSelectController implements Initializable{
     private void refreshAccounts() {
         List<Account> accountList = DatabaseHelper.getAllAccounts();
         accountListView.setItems(FXCollections.observableArrayList(accountList));
+    }
+    private void updateLang() {
+        ResourceBundle rb = ResourceBundle.getBundle("messages", data.getLang());
+
+        yourAccountsLabel.setText(rb.getString("yourAccounts"));
+        createnewLabel.setText(rb.getString("createNew"));
+        welcomeBackLabel.setText(rb.getString("welcomeBack"));
+        viewTransactionsButton.setText(rb.getString("viewAllAccountsTransactions"));
+        createAccountButton.setText(rb.getString("createButton"));
+        accountTypeComboBox.setPromptText(rb.getString("chooseType"));
+        manageSystemButton.setText(rb.getString("manageSystem"));
+    }
+
+    @FXML
+    void toggleLang(ActionEvent event) {
+        data.setLang((data.getLang().equals(Locale.CANADA)) ? Locale.CANADA_FRENCH : Locale.CANADA);
+        String langText = (langButton.getText().equals("EN")) ? "FR" : "EN";
+        langButton.setText(langText);
+        updateLang();
     }
 }

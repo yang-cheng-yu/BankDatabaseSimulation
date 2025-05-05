@@ -10,7 +10,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.bankdatabasesimulation.CustomerController">
    <children>
-      <Label layoutX="236.0" layoutY="20.0" text="Customer">
+      <Label fx:id="customerLabel" layoutX="236.0" layoutY="20.0" text="Customer">
          <font>
             <Font size="30.0" />
          </font>
@@ -25,7 +25,7 @@
         </columns>
       </TableView>
       <Button fx:id="displayTransactionButton" layoutX="361.0" layoutY="158.0" mnemonicParsing="false" onAction="#displayTransactions" prefHeight="37.0" prefWidth="149.0" text="Display All Transactions" />
-      <Label layoutX="35.0" layoutY="71.0" text="Amount: ">
+      <Label fx:id="amountLabel1" layoutX="35.0" layoutY="71.0" text="Amount: ">
          <font>
             <Font size="16.0" />
          </font>
@@ -33,7 +33,7 @@
       <TextField fx:id="transactionAmoundTextField" layoutX="110.0" layoutY="71.0" />
       <Button fx:id="depositButton" layoutX="202.0" layoutY="102.0" mnemonicParsing="false" onAction="#deposit" text="Deposit" />
       <Button fx:id="withdrawButton" layoutX="110.0" layoutY="102.0" mnemonicParsing="false" onAction="#withdraw" text="Withdraw" />
-      <Label layoutX="361.0" layoutY="71.0" text="Amount: ">
+      <Label fx:id="amountLabel2" layoutX="361.0" layoutY="71.0" text="Amount: ">
          <font>
             <Font size="16.0" />
          </font>
@@ -46,7 +46,7 @@
       </Label>
       <TextField fx:id="sendemailTextField" layoutX="426.0" layoutY="102.0" />
       <Button fx:id="sendButton" layoutX="532.0" layoutY="137.0" mnemonicParsing="false" onAction="#send" text="Send" />
-      <Label layoutX="35.0" layoutY="167.0" text="Account Balance:">
+      <Label fx:id="accountBalanceTextLabel" layoutX="35.0" layoutY="167.0" text="Account Balance:">
          <font>
             <Font size="16.0" />
          </font>
@@ -56,6 +56,7 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <Button layoutX="247.0" layoutY="158.0" mnemonicParsing="false" onAction="#viewInterest" prefHeight="37.0" prefWidth="106.0" text="View Interest" />
+      <Button fx:id="viewInterestButton" layoutX="247.0" layoutY="158.0" mnemonicParsing="false" onAction="#viewInterest" prefHeight="37.0" prefWidth="106.0" text="View Interest" />
+      <Button fx:id="langButton" layoutX="24.0" layoutY="30.0" mnemonicParsing="false" onAction="#toggleLang" text="FR" />
    </children>
 </AnchorPane>

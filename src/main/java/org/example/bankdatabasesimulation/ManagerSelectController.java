@@ -120,6 +120,11 @@ public class ManagerSelectController implements Initializable{
     public void initialize(URL url, ResourceBundle resourceBundle) {
         data = DataSingleton.getInstance();
 
+        String langText = (data.getLang().equals(Locale.CANADA)) ? "FR" : "EN";
+        langButton.setText(langText);
+
+        updateLang();
+
         refreshAccounts();
 
         List<AccountType> typeList = new ArrayList<>();

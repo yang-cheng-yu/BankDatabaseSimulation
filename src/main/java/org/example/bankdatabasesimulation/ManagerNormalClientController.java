@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class ManagerNormalClientController implements Initializable {
@@ -23,6 +24,14 @@ public class ManagerNormalClientController implements Initializable {
     public TableColumn tranAmountTable;
     public TableColumn tranDescTable;
     public TableColumn tranDateTable;
+    public Label accountBalanceTextLabel;
+    public Label emailLabel;
+    public Label amountLabel2;
+    public Label amountLabel1;
+    public Label managerLabel;
+    public Button viewInterestButton;
+
+    public Button langButton;
     @FXML
     private Button depositButton;
 
@@ -51,9 +60,19 @@ public class ManagerNormalClientController implements Initializable {
     @FXML
     private Label accountBalanceLabel;
 
+    private DataSingleton data;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        data = DataSingleton.getInstance();
+
         updateBalance();
+
+
+        String langText = (data.getLang().equals(Locale.CANADA)) ? "FR" : "EN";
+        langButton.setText(langText);
+
+        updateLang();
 
         tranIdTable.setCellValueFactory(new PropertyValueFactory<>("transactionId"));
         accountIdTable.setCellValueFactory(new PropertyValueFactory<>("accountId"));
@@ -149,6 +168,32 @@ public class ManagerNormalClientController implements Initializable {
         String temp =String.valueOf(money);
         String temp2 = temp + "$";
         accountBalanceLabel.setText(temp2);
+    }
+    private void updateLang() {
+        ResourceBundle rb = ResourceBundle.getBundle("messages", data.getLang());
+
+
+        amountLabel1.setText(rb.getString("amount"));
+        amountLabel2.setText(rb.getString("amount"));
+        withdrawButton.setText(rb.getString("withdraw"));
+        depositButton.setText(rb.getString("deposit"));
+        accountBalanceTextLabel.setText(rb.getString("accBal"));
+        sendButton.setText(rb.getString("send"));
+        sendemailTextField.setPromptText(rb.getString("emailL"));
+        tranIdTable.setText(rb.getString("tranId"));
+        accountIdTable.setText(rb.getString("accId"));
+        tranAmountTable.setText(rb.getString("amountCol"));
+        viewInterestButton.setText(rb.getString("viewInterest"));
+        displayTransactionButton.setText(rb.getString("displayAllTransactions"));
+        managerLabel.setText(rb.getString("manager"));
+    }
+
+    @FXML
+    void toggleLang(ActionEvent event) {
+        data.setLang((data.getLang().equals(Locale.CANADA)) ? Locale.CANADA_FRENCH : Locale.CANADA);
+        String langText = (langButton.getText().equals("EN")) ? "FR" : "EN";
+        langButton.setText(langText);
+        updateLang();
     }
 }
 

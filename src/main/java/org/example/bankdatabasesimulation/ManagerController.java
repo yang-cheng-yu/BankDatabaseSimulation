@@ -44,28 +44,7 @@ public class ManagerController implements Initializable {
     private TextField accountIdTextBox;
 
     @FXML
-    private TextField amountTextBox;
-
-    @FXML
-    private Button createAccountButton;
-
-    @FXML
-    private RadioButton creditRadioButton;
-
-    @FXML
-    private RadioButton debitRadioButton;
-
-    @FXML
-    private Button depositButton;
-
-    @FXML
     private Button displayAccountsButton;
-
-    @FXML
-    private Button displayAllCustomerButton;
-
-    @FXML
-    private Button displayAllManagersButton;
 
     @FXML
     private Button displayAllUsersButton;
@@ -80,25 +59,8 @@ public class ManagerController implements Initializable {
     private Button displayTransactionButton;
 
     @FXML
-    private Button displayYourAccountsButton;
-
-    @FXML
-    private Button displayYourTransactionsButton;
-
-    @FXML
-    private TextField emailTextBox;
-
-    @FXML
     private Button freezeAccountButton;
 
-    @FXML
-    private TextField initialBalanceTextBox;
-
-    @FXML
-    private RadioButton investmentRadioButton;
-
-    @FXML
-    private TableView<Object> managerTable;
 
     @FXML
     private TextField maxTextBox;
@@ -106,26 +68,22 @@ public class ManagerController implements Initializable {
     @FXML
     private TextField minTextBox;
 
-    @FXML
-    private Button sendButton;
 
     @FXML
     private Button sortAccountsByBalanceButton;
 
-    @FXML
-    private Button sortUsersByNameButton;
+
 
     @FXML
     private TextField userIdTextBox;
 
-    @FXML
-    private Button withdrawButton;
 
     private DataSingleton data;
 
     @FXML
     void displayAccounts(ActionEvent event) {
         try {
+            //display every account
             accountTable.setItems(FXCollections.observableArrayList(DatabaseHelper.getEveryAccount()));
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -137,51 +95,28 @@ public class ManagerController implements Initializable {
     }
 
     @FXML
-    void displayAllCustomers(ActionEvent event) {
-        try {
-            DatabaseHelper.getAllCustomers();
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("System Error");
-            alert.setContentText("Error in the system.");
-            alert.show();
-        }
-    }
-
-    @FXML
-    void displayAllManagers(ActionEvent event) {
-        try {
-
-            List<User> list = DatabaseHelper.getAllManagers();
-            ObservableList<User> observableList = FXCollections.observableArrayList(list);
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("System Error");
-            alert.setContentText("Error in the system.");
-            alert.show();
-        }
-    }
-
-
-    @FXML
     void displayOnlyActiveAccounts(ActionEvent event) {
+        //list of accounts, loading every account
         List<Account> accounts = DatabaseHelper.getEveryAccount();
+        //using streams, filter the accounts list by only getting accounts with active status
         accounts = accounts.stream()
                 .filter(account -> account.getStatus().equals(Status.ACTIVE))
                 .collect(Collectors.toList());
 
+        //set the table to accounts
         accountTable.setItems(FXCollections.observableArrayList(accounts));
     }
 
     @FXML
     void displayRange(ActionEvent event) {
         try {
+            //get fields min and max
             double min = Double.parseDouble(minTextBox.getText());
             double max = Double.parseDouble(maxTextBox.getText());
 
+            //list of every account
             List<Account> accounts = DatabaseHelper.getEveryAccount();
+            //using streams, filter accounts by min and max range
             accounts = accounts.stream()
                             .filter(account -> account.getBalance() >= min && account.getBalance() <= max)
                                     .collect(Collectors.toList());
@@ -201,6 +136,7 @@ public class ManagerController implements Initializable {
     @FXML
     void displayallUsers(ActionEvent event) {
         try {
+            //to display all users, make new form with a User type table to display
             FXMLLoader loader = new FXMLLoader(getClass().getResource("displayUsers.fxml"));
             Parent root = loader.load();
 
@@ -222,7 +158,9 @@ public class ManagerController implements Initializable {
     @FXML
     void freezeAccount(ActionEvent event) {
         try {
+            //get and parse accountid field from text box
             int accountId = Integer.parseInt(accountIdTextBox.getText());
+            //call freeze method
             DatabaseHelper.freezeAccount(accountId);
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -236,8 +174,9 @@ public class ManagerController implements Initializable {
 
     @FXML
     void sortAccountsByBalance(ActionEvent event) {
+        //get every account from the current table
         List<Account> testing =  accountTable.getItems();
-        List<Account> accounts = DatabaseHelper.getEveryAccount();
+        //using streams sort the table by comparing balance
         testing = testing.stream()
                 .sorted(Comparator.comparing(account -> account.getBalance()))
                 .collect(Collectors.toList());
@@ -247,6 +186,7 @@ public class ManagerController implements Initializable {
 
     public void displayUserTransaction(ActionEvent actionEvent) {
         try {
+            //load transaction form to display information
             FXMLLoader loader = new FXMLLoader(getClass().getResource("displayTransactions.fxml"));
             Parent root = loader.load();
 
@@ -275,7 +215,9 @@ public class ManagerController implements Initializable {
 
     public void displayUserAccounts(ActionEvent actionEvent) {
         try {
+            //get and parse field from text box
             int userId = Integer.parseInt(userIdTextBox.getText());
+            //set accountTable to getAllAccounts of the userId
             accountTable.setItems(FXCollections.observableArrayList(DatabaseHelper.getAllAccounts(userId)));
         } catch (Exception e){
             Alert alert = new Alert(Alert.AlertType.ERROR);

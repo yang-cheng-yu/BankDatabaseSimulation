@@ -10,6 +10,7 @@ public class DatabaseHelper {
 
     private static Connection connection;
 
+    //used this method a couple times just to have less code in the methods, it just executes the sql string
     private static void execute(String sql, String message){
         try {
             Statement stmt = connection.createStatement();
@@ -28,6 +29,7 @@ public class DatabaseHelper {
 
 
 
+    //creating the users table
     public static void createUsersTable(){
         String sql = """
                 CREATE TABLE IF NOT EXISTS users(
@@ -44,6 +46,7 @@ public class DatabaseHelper {
         execute(sql, "Users table created");
     }
 
+    //creating the customers table
     public static void createCustomersTable(){
         String sql = """
                 CREATE TABLE IF NOT EXISTS customers(
@@ -55,6 +58,7 @@ public class DatabaseHelper {
         execute(sql, "Customers table created");
     }
 
+    //creating the managers table
     public static void createManagersTable(){
         String sql = """
                 CREATE TABLE IF NOT EXISTS managers(
@@ -66,6 +70,7 @@ public class DatabaseHelper {
         execute(sql, "Managers table created");
     }
 
+    //creating accounts table
     public static void createAccountsTable(){
         String sql = """
                 CREATE TABLE IF NOT EXISTS accounts(
@@ -80,6 +85,7 @@ public class DatabaseHelper {
         execute(sql,"Accounts table created");
     }
 
+    //creating transactions table
     public static void createTransactionTable(){
         String sql = """
                 CREATE TABLE IF NOT EXISTS transactions(
@@ -94,8 +100,10 @@ public class DatabaseHelper {
         execute(sql, "Transaction table created");
     }
 
+    //insert customer method
     public static void insertCustomer(String accountPass, String fname, String lname,
                                       String email, String phonenum, long DOB, String address){
+        //insert all the information to a more general user table
         String sql = """
                 INSERT INTO users(accountPass,fname,lname,email,phonenum,DOB,address) VALUES(?,?,?,?,?,?,?);
                 """;
@@ -113,6 +121,7 @@ public class DatabaseHelper {
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
                 int userId = rs.getInt(1);
+                //CALLING  HELPER METHOD
                 insertCustomerHelper(userId);
             }
 
@@ -122,6 +131,7 @@ public class DatabaseHelper {
         }
     }
 
+    //helper method that inserts record into customer table
     private static void insertCustomerHelper(int userId){
         String sql = """
                 INSERT INTO customers(userId) VALUES(?);
@@ -136,7 +146,7 @@ public class DatabaseHelper {
         }
     }
 
-
+    //insert manager method
     public static void insertManager(String accountPass, String fname, String lname,
                                       String email, String phonenum, long DOB, String address){
         String sql = """
@@ -156,6 +166,7 @@ public class DatabaseHelper {
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
                 int userId = rs.getInt(1);
+                //CALLING HELPER METHOD
                 insertManagerHelper(userId);
             }
             System.out.println("Manager Inserted");
@@ -164,6 +175,7 @@ public class DatabaseHelper {
         }
     }
 
+    //helper method to insert a record into manager table
     private static void insertManagerHelper(int userId){
         String sql = """
                 INSERT INTO managers(userId) VALUES(?);
@@ -196,19 +208,24 @@ public class DatabaseHelper {
         execute(sql,"TRG_MANAGER_USER_ADD Trigger created");
     }
 
+    //get all accounst method that gets all the accounts of the current user
     public static List<Account> getAllAccounts() {
         User current = DataSingleton.getInstance().getCurrentUser();
         int id = current.userId;
         return getAllAccounts(id);
     }
 
+    //gets every accounts in the db
     public static List<Account> getEveryAccount() {
+        //temp list to return
         List<Account> accounts = new ArrayList<>();
+        //query
         String sql = "SELECT * FROM accounts";
         try (PreparedStatement ps = connection.prepareStatement(sql)){
             ResultSet rs = ps.executeQuery();
-
+            //while there are results
             while (rs.next()) {
+                //switch case to turn int accounttype to actual object
                 int type = rs.getInt(3);
                 AccountType testing = switch (type) {
                     case 1 -> AccountType.DEBIT;
@@ -216,6 +233,7 @@ public class DatabaseHelper {
                     case 3 -> AccountType.INVESTMENT;
                     default -> null;
                 };
+                //switch case to turn int status to enum
                 int status = rs.getInt(5);
                 Status test = switch (status) {
                     case 0 -> Status.ACTIVE;
@@ -223,6 +241,7 @@ public class DatabaseHelper {
                     case 2 -> Status.IN_DEBT;
                     default -> null;
                 };
+                //add the account to the list
                 accounts.add(new Account(
                         rs.getInt(1),
                         rs.getInt(2),
@@ -237,8 +256,10 @@ public class DatabaseHelper {
         return accounts;
     }
 
+    //get all accounts of the specified user ID
     public static List<Account> getAllAccounts(int id){
         List<Account> accounts = new ArrayList<>();
+        //query
         String sql = """
                 SELECT * FROM accounts WHERE userId = ?
                 """;
@@ -246,7 +267,9 @@ public class DatabaseHelper {
             ps.setInt(1,id);
             ResultSet rs = ps.executeQuery();
 
+            //while there are results
             while (rs.next()) {
+                //switch case to turn accounttype int to object
                 int type = rs.getInt(3);
                 AccountType testing = switch (type) {
                     case 1 -> AccountType.DEBIT;
@@ -254,6 +277,7 @@ public class DatabaseHelper {
                     case 3 -> AccountType.INVESTMENT;
                     default -> null;
                 };
+                //switch case to turn status int from db to enum
                 int status = rs.getInt(5);
                 Status test = switch (status) {
                     case 0 -> Status.ACTIVE;
@@ -261,6 +285,7 @@ public class DatabaseHelper {
                     case 2 -> Status.IN_DEBT;
                     default -> null;
                 };
+                //add the account to the list
                 accounts.add(new Account(
                         rs.getInt(1),
                         rs.getInt(2),
@@ -277,15 +302,19 @@ public class DatabaseHelper {
     }
 
 
+    //get all users from the db
     public static List<User> getAllUsers()
     {
         List<User> users = new ArrayList<>();
+        //query
         String sql="SELECT * FROM users";
         try{
             Statement stmt=connection.createStatement();
             ResultSet rs=stmt.executeQuery(sql);
+            //while there is a result
             while(rs.next())
             {
+                //add the users to the list
                 users.add(new User(
                         rs.getInt(1),
                         rs.getString(2),
@@ -305,9 +334,10 @@ public class DatabaseHelper {
         return users;
     }
 
+    //get all customers
     public static List<User> getAllCustomers(){
         List<User> customers = new ArrayList<>();
-
+        //query returns every user that is a customer
         String sql = """
                 SELECT * FROM users WHERE userId IN (SELECT userId
                 FROM Customers);
@@ -315,6 +345,7 @@ public class DatabaseHelper {
         try (PreparedStatement ps = connection.prepareStatement(sql)){
             ResultSet rs = ps.executeQuery();
 
+            //while there are results add the users to the list
             while(rs.next()) {
                 customers.add(new User(
                         rs.getInt(1),
@@ -333,16 +364,17 @@ public class DatabaseHelper {
         return customers;
     }
 
+    //get all managers
     public static List<User> getAllManagers(){
         List<User> managers = new ArrayList<>();
-
+        //query that returns every user that is a manager
         String sql = """
                 SELECT * FROM users WHERE userId IN (SELECT userId
                 FROM Managers);
                 """;
         try (PreparedStatement ps = connection.prepareStatement(sql)){
             ResultSet rs = ps.executeQuery();
-
+            //while there are results add the managers to the list
             while(rs.next()) {
                 managers.add(new User(
                         rs.getInt(1),
@@ -360,21 +392,23 @@ public class DatabaseHelper {
         }
         return managers;
     }
+    //get all transactions of the current user for all accounts
     public static List<Transaction> getAllTransactions(){
         User current = DataSingleton.getInstance().getCurrentUser();
         int id = current.userId;
         return getAllTransactions(id);
     }
 
+    //get all transactions of specified user for all accounts
     public static List<Transaction> getAllTransactions(int id)
     {
         List<Transaction> transactions = new ArrayList<>();
-
+        //query that returns every transaction from the userId
         String sql="SELECT * FROM transactions WHERE accountId IN (SELECT accountId FROM accounts WHERE userId = ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1,id);
             ResultSet rs = ps.executeQuery();
-
+                //while there are results add the transaction to the list
                 while(rs.next())
                 {
                     transactions.add(new Transaction(
@@ -390,10 +424,11 @@ public class DatabaseHelper {
         return transactions;
     }
 
+    //get all transactions for only the current accountID
     public static List<Transaction> getCurrentTransactions()
     {
         List<Transaction> transactions = new ArrayList<>();
-
+        //query
         String sql="SELECT * FROM transactions WHERE accountId = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1,DataSingleton.getInstance().getCurrentAccount().getAccountId());
@@ -415,8 +450,9 @@ public class DatabaseHelper {
     }
 
 
-
+    //login method to login to the application
     public static boolean login(String email, String password) {
+        //query a user in the db that matches with the email and password
         String sql = "SELECT * FROM users WHERE email = ? AND accountPass = ? LIMIT 1";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
@@ -424,7 +460,9 @@ public class DatabaseHelper {
             ps.setString(2, password);
 
             try (ResultSet rs = ps.executeQuery()) {
+                //if there is a result
                 if (rs.next()){
+                    //get all the properties of a user
                     int userId = rs.getInt("userId");
                     String pass = rs.getString("accountPass");
                     String fName = rs.getString("fName");
@@ -433,16 +471,20 @@ public class DatabaseHelper {
                     Date dob = rs.getDate("DOB");
                     String address = rs.getString("Address");
 
+                    //second query to see if that userId is in customers
                     String sql2 = "SELECT * FROM customers WHERE userId = ? LIMIT 1";
                     try (PreparedStatement ps2 = connection.prepareStatement(sql2)) {
                         ps2.setInt(1, userId);
 
                         try (ResultSet rs2 = ps2.executeQuery()) {
+                            //IF THERE IS A MATCHING RECORD IN CUSTOMER IT MUST BE A CUSTOMER
                             if (rs2.next()) {
                                 int customerId = rs2.getInt("customerId");
                                 // It's a customer
                                 Customer customer = new Customer(userId,customerId,pass ,fName, lName, email, phoneNum, dob, address);
+                                //created a customer with that information and set the current user to that customer
                                 DataSingleton.getInstance().setCurrentUser(customer);
+                                //logging the result for debugging (always good to have)
                                 System.out.println(DataSingleton.getInstance().getCurrentUser());
                                 return true;
                             } else {
@@ -473,25 +515,31 @@ public class DatabaseHelper {
         return false;
     }
 
+    //compute status of accounts when their balance changes
     public static int computeStatus(AccountType accountType, double balance) {
+        //if balance is lower than zero then set to in debt
         if (balance < 0) {
             return 2;
+            //else if the accounttype is of investment then automatically set to frozen
         } else if (accountType.equals(AccountType.INVESTMENT)) {
             return 1;
         } else {
+            //else it must be active
             return 0;
         }
     }
 
+    //insert account method
     public static void insertAccount(AccountType accountType, double balance) {
         User current = DataSingleton.getInstance().getCurrentUser();
+        //if the current user is null then there is no user that is logged in (impossible)
         if (current == null) {
             System.err.println("No user is logged in. Cannot create account.");
             return;
         }
 
         int accountTypeId = accountType.getAccTypeId();
-
+        //query to find if there is already an accountType from that user
         String sql2 = """
                 SELECT * FROM accounts WHERE userId = ? AND accountTypeId = ?
                 """;
@@ -500,7 +548,7 @@ public class DatabaseHelper {
             select.setInt(2,accountTypeId);
 
             ResultSet result = select.executeQuery();
-
+            //if there is a result then error
             if (result.next()) {
                 System.err.println("Already have an account of that type");
                 return;
@@ -510,8 +558,9 @@ public class DatabaseHelper {
             throw new RuntimeException(e);
         }
         int userId = current.getUserId();
+        //get the initial status of the account by calling the computeStatus method with the initial balance
         int status = computeStatus(accountType, balance);
-
+        //insert the account into the db
         String sql = """
         INSERT INTO accounts(userId, accountTypeId, balance, status)
         VALUES(?, ?, ?, ?);
@@ -535,12 +584,14 @@ public class DatabaseHelper {
     public static void withdraw(AccountType accountType, double money){
 
         User current = DataSingleton.getInstance().getCurrentUser();
+        //if current user is null then error (impossible)
         if (current == null) {
             System.err.println("No user is logged in. Cannot create account.");
             return;
         }
         int userId = current.getUserId();
         int accountTypeInt = accountType.getAccTypeId();
+        //query status balance and accountId from accounts with the user's Id and accountType
         String sql = """
                 SELECT status , balance, accountId FROM accounts
                         WHERE userId = ? AND accountTypeId = ?;
@@ -551,11 +602,13 @@ public class DatabaseHelper {
             selectStmt.setInt(2, accountTypeInt);
 
             ResultSet rs = selectStmt.executeQuery();
+            //if there is a result
             if (rs.next()) {
                 double currentBalance = rs.getDouble("balance");
                 int accountId = rs.getInt("accountId");
                 int status = rs.getInt("status");
 
+                //check to see if the status of the account is frozen, if so then cant withdraw
                 if (status == 1){
                     System.err.println("Can't withdraw money from a frozen account");
                     javafx.application.Platform.runLater(() -> {
@@ -569,13 +622,18 @@ public class DatabaseHelper {
                     return;
                 }
 
-
+                //turn money to positive num if it is negative
                 money = Math.abs(money);
+                //new balance
                 double newBalance = currentBalance - money;
+                //make new status for account, call computeStatus method
                 int newStatus = computeStatus(accountType,newBalance);
+                //make money negative to prepare for transaction
                 money *= -1;
+                //CREATE TRANSACTION FOR WITHDRAWAL
                 createTransaction(accountId,money,"Withdraw");
 
+                //update the balance in the db for the current user's current account
                 String updateSql = """
                 UPDATE accounts SET balance = ?, status = ?
                 WHERE userId = ? AND accountTypeId = ?;
@@ -587,6 +645,7 @@ public class DatabaseHelper {
                     updateStmt.setInt(3, userId);
                     updateStmt.setInt(4, accountTypeInt);
 
+                    //check to see if withdrawal was succesful or not
                     int rowsAffected = updateStmt.executeUpdate();
                     if (rowsAffected > 0) {
                         System.out.println("Withdrawal successful. New balance: " + newBalance);
@@ -606,12 +665,14 @@ public class DatabaseHelper {
 
     public static void deposit(AccountType accountType, double money){
         User current = DataSingleton.getInstance().getCurrentUser();
+        //if current user is null then error (impossible)
         if (current == null) {
             System.err.println("No user is logged in. Cannot create account.");
             return;
         }
         int userId = current.getUserId();
         int accountTypeInt = accountType.getAccTypeId();
+        //query balance and accountId from accounts with matching userId accountType
         String sql = """
                 SELECT balance, accountId FROM accounts
                         WHERE userId = ? AND accountTypeId = ?;
@@ -622,15 +683,20 @@ public class DatabaseHelper {
             selectStmt.setInt(2, accountTypeInt);
 
             ResultSet rs = selectStmt.executeQuery();
+            //if there is a result
             if (rs.next()) {
                 double currentBalance = rs.getDouble("balance");
                 int accountId = rs.getInt("accountId");
 
+                //make money positive number
                 money = Math.abs(money);
                 double newBalance = currentBalance + money;
+                //make new status for account call computestatus method
                 int newStatus = computeStatus(accountType,newBalance);
+                //CREATE TRANSACTION FOR THIS DEPOSIT
                 createTransaction(accountId,money,"Deposit");
 
+                //update balance of the current user's account
                 String updateSql = """
                 UPDATE accounts SET balance = ?, status = ?
                 WHERE userId = ? AND accountTypeId = ?;
@@ -642,6 +708,7 @@ public class DatabaseHelper {
                     updateStmt.setInt(3, userId);
                     updateStmt.setInt(4, accountTypeInt);
 
+                    //check to see if the deposit went succesful
                     int rowsAffected = updateStmt.executeUpdate();
                     if (rowsAffected > 0) {
                         System.out.println("Deposit successful. New balance: " + newBalance);
@@ -658,7 +725,10 @@ public class DatabaseHelper {
             System.err.println("Deposit failed: " + e.getMessage());
         }
     }
+
+
     private static void createTransaction(int accountId, double amount, String description) {
+        //insert transaction record with the given inputs
         String sql2 = """
                         INSERT INTO transactions(accountId, tranAmount, tranDescription, tranDate) VALUES(?,?,?,?);
                         """;
@@ -677,9 +747,12 @@ public class DatabaseHelper {
     }
 
     public static void transfer(AccountType accountType, double money, String email, AccountType receivingAccountType) {
+        //turn money into positive just in case
         money = Math.abs(money);
 
+        //check if the reciepent has a specified account
         if (recipientExistsWithAccount(email,receivingAccountType)) {
+            //if true then carry on with transaction
             withdraw(accountType,money);
             sendMoney(money,email,receivingAccountType);
         } else {
@@ -694,6 +767,7 @@ public class DatabaseHelper {
     }
 
     private static boolean recipientExistsWithAccount(String email, AccountType accountType) {
+        //find user that by email and accountType
         String sql = "SELECT u.userId FROM users u JOIN accounts a ON u.userId = a.userId WHERE u.email = ? AND a.accountTypeId = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, email.trim());
@@ -706,6 +780,7 @@ public class DatabaseHelper {
         }
     }
     private static void sendMoney(double money, String email, AccountType receivingAccountType) {
+        //find userId by email (result must be 1 record)
         String sql = """
                 SELECT userId FROM users WHERE email = ?;
                 """;
@@ -713,9 +788,10 @@ public class DatabaseHelper {
             select.setString(1,email);
 
             ResultSet rs = select.executeQuery();
+            //if theres a result
             if (rs.next()) {
                 int userId = rs.getInt("userId");
-
+                //find accountId, balance from accounts table with given UserId and accountType
                 String sql2 = """
                         SELECT accountId , balance FROM accounts WHERE userId = ? AND AccountTypeId = ?;
                         """;
@@ -724,12 +800,13 @@ public class DatabaseHelper {
                     select2.setInt(2,receivingAccountType.getAccTypeId());
 
                     ResultSet result = select2.executeQuery();
+                    //if theres a result
                     if (result.next()) {
                         double balance = result.getDouble("balance");
                         int accountId = result.getInt("accountId");
-
+                        //change balance value
                         balance = balance + money;
-
+                        //update balance in the db for the receiving account
                         String sql3 = """
                                 UPDATE accounts SET balance = ?
                                 WHERE userId = ? AND accountTypeId = ?;
@@ -739,7 +816,7 @@ public class DatabaseHelper {
                             select3.setInt(2,userId);
                             select3.setInt(3,receivingAccountType.getAccTypeId());
 
-
+                            //check to see if the row was updated
                             int rowsAffected = select3.executeUpdate();
                             if (rowsAffected > 0) {
                                 createTransaction(accountId,money,"Deposit");
@@ -765,7 +842,9 @@ public class DatabaseHelper {
             System.err.println("error: " +e.getMessage());
         }
     }
+    //freeze method for managers
     public static void freezeAccount(int id){
+        //update account to set the status
         String sql = """
                 UPDATE accounts SET status = ?
                 WHERE accountId = ?
@@ -781,14 +860,19 @@ public class DatabaseHelper {
         }
     }
     public static ArrayList<InterestObject> viewInterest(Account account) {
-
+        //arraylist of object InterestObject
         ArrayList<InterestObject> interestList = new ArrayList<>();
 
+        //get the insterestRate from the accountType
         double interest = account.getAccountType().getInterestRate();
+        //get balance
         double balance = account.getBalance();
 
+        //iterate 10 times
         for (int i = 1; i <= 10; i++){
+            //calculate interest growth
             balance += balance * interest;
+            //add that to the list
             interestList.add(new InterestObject(i,balance));
         }
         return interestList;

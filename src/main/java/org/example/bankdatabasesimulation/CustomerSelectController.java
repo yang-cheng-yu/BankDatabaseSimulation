@@ -59,6 +59,7 @@ public class CustomerSelectController implements Initializable {
     @FXML
     void viewAllTransactions(ActionEvent event) {
         try {
+            //create display transaction form to display transaction
             FXMLLoader loader = new FXMLLoader(getClass().getResource("displayTransactions.fxml"));
             Parent root = loader.load();
 

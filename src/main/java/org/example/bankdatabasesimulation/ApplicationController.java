@@ -43,19 +43,17 @@ public class ApplicationController implements Initializable {
 
     private DataSingleton data;
 
-    @FXML
-    void createCustomer(MouseEvent event) {
-        DatabaseHelper.insertCustomer("customer", "customer", "customer", "customer@example.com", "999-999-9999", System.currentTimeMillis(), "123 Dummy-Address st.");
-        createUserButton.setVisible(false);
-    }
 
     @FXML
     void login(ActionEvent event) {
+        //log
         System.out.println("login");
+        //if login method works
         if (DatabaseHelper.login(emailBox.getText(), passwordBox.getText())) {
+            //log
             System.out.println("if");
             try {
-
+                //if current user is = to a customer create customer form
                 if (DataSingleton.getInstance().getCurrentUser().getClass() == Customer.class) {
                     FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("customer-select.fxml"));
                     Scene scene = new Scene(fxmlLoader.load(), 600, 400);
@@ -65,6 +63,7 @@ public class ApplicationController implements Initializable {
                     Stage window = (Stage) emailBox.getScene().getWindow();
                     window.close();
                 } else {
+                    //else it must be a manager
                     FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("manager-select.fxml"));
                     Scene scene = new Scene(fxmlLoader.load(), 600, 400);
                     Stage stage = new Stage();

@@ -84,6 +84,7 @@ public class CreateUserController implements Initializable {
     @FXML
     void createUser(ActionEvent event) {
         try {
+            //toggle for either manager or customer
             Toggle userType = userToggleGroup.getSelectedToggle();
             if (userType == null) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -92,6 +93,7 @@ public class CreateUserController implements Initializable {
                 alert.setContentText("Please choose a user type");
                 alert.show();
             }
+            //get every text field
             String pass = passTextField.getText();
             String fname = fNameTextField.getText();
             String lname = lNameTextField.getText();
@@ -100,6 +102,7 @@ public class CreateUserController implements Initializable {
             long DOB = Long.parseLong(dateBirthTextField.getText());
             String address = addressTextField.getText();
 
+            //check to see if any field is left empty and throw error
             if (pass.isEmpty()||fname.isEmpty()||lname.isEmpty()||email.isEmpty()||phonenum.isEmpty()||address.isEmpty()){
                 System.err.println("Fill out every input field");
                 javafx.application.Platform.runLater(() -> {
@@ -110,10 +113,12 @@ public class CreateUserController implements Initializable {
                     alert.showAndWait();
                 });
             }
+            //if selected radio button is customer then make a customer
             if (userType == customerRadioButton) {
                 DatabaseHelper.insertCustomer(pass, fname, lname, email, phonenum, DOB, address);
                 goBackToMainPage();
             } else {
+                //else must be manager
                 DatabaseHelper.insertManager(pass, fname, lname, email, phonenum, DOB, address);
                 goBackToMainPage();
             }
@@ -126,6 +131,7 @@ public class CreateUserController implements Initializable {
     void goBack(ActionEvent event) {
         goBackToMainPage();
     }
+    //go back method used to go back to the main page, this is used a lot in the code so it is often seen
     private void goBackToMainPage(){
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("app.fxml"));
@@ -153,6 +159,8 @@ public class CreateUserController implements Initializable {
     private void updateLang() {
         ResourceBundle rb = ResourceBundle.getBundle("messages", data.getLang());
 
+
+        //for localisation
         createUserLabel.setText(rb.getString("createUser"));
         createUserButton.setText(rb.getString("createUser"));
         customerRadioButton.setText(rb.getString("customer"));

@@ -58,27 +58,34 @@ public class DisplayUsersController implements Initializable {
 
     private DataSingleton data;
 
+
     @FXML
     void filterManagers(ActionEvent event) {
+        //display only users that are manager
         List<User> testing =  DatabaseHelper.getAllManagers();
         userTable.setItems(FXCollections.observableArrayList(testing));
     }
 
     @FXML
     void resetTable(ActionEvent event) {
+        //reset the table by displaying all users
         userTable.setItems(FXCollections.observableArrayList(DatabaseHelper.getAllUsers()));
     }
 
     @FXML
     void sortByName(ActionEvent event) {
+        //make testing list
         List<User> testing =  userTable.getItems();
+        //using streams, sort them by comparing account.fname
         testing = testing.stream()
                 .sorted(Comparator.comparing(account -> account.getFName()))
                 .collect(Collectors.toList());
 
+        //set the table to testing
         userTable.setItems(FXCollections.observableArrayList(testing));
     }
 
+    //go back method to go back to the past form
     public void goBack(ActionEvent actionEvent) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("manager-client.fxml"));
@@ -117,10 +124,13 @@ public class DisplayUsersController implements Initializable {
         userTable.setItems(FXCollections.observableArrayList(users));
     }
 
+
     public void filterCustomers(ActionEvent actionEvent) {
+        //display only users who are customers
         List<User> testing =  DatabaseHelper.getAllCustomers();
         userTable.setItems(FXCollections.observableArrayList(testing));
     }
+
     private void updateLang() {
         ResourceBundle rb = ResourceBundle.getBundle("messages", data.getLang());
 

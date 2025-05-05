@@ -39,9 +39,11 @@ public class DisplayInterestController implements Initializable {
 
     private DataSingleton data;
 
+    //go back method
     @FXML
     void goBack(ActionEvent event) {
         try {
+            //creates form for the past form
             FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("customer-client.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 600, 400);
             Stage stage = new Stage();

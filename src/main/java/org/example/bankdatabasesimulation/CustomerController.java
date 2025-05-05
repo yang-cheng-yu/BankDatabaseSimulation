@@ -66,8 +66,11 @@ public class CustomerController implements Initializable {
     @FXML
     void deposit(ActionEvent event) {
         try {
+            //get and parse text field input
             double money = Double.parseDouble(transactionAmoundTextField.getText());
+            //call deposit method
             DatabaseHelper.deposit(DataSingleton.getInstance().getCurrentAccount().getAccountType(), money);
+            //update the balance label
             updateBalance();
         } catch (Exception e) {
             System.err.println("Input all fields" + e.getMessage());
@@ -83,12 +86,14 @@ public class CustomerController implements Initializable {
 
     @FXML
     void displayTransactions(ActionEvent event) {
+        //load transactions to the table
         customerTable.setItems(FXCollections.observableArrayList(DatabaseHelper.getCurrentTransactions()));
     }
 
     @FXML
     void viewInterest(ActionEvent event) {
         try {
+            //create displayinterest form to load the interest table
             FXMLLoader loader = new FXMLLoader(getClass().getResource("displayInterest.fxml"));
             Parent root = loader.load();
 
@@ -110,9 +115,12 @@ public class CustomerController implements Initializable {
     @FXML
     void send(ActionEvent event) {
         try {
+            //get and parse money and email fields
             double money = Double.parseDouble(sendAmountTextField.getText());
             String email = sendemailTextField.getText();
+            //call transfer method
             DatabaseHelper.transfer(DataSingleton.getInstance().getCurrentAccount().getAccountType(), money, email, AccountType.DEBIT);
+            //update account balance label
             updateBalance();
         } catch (Exception e) {
             System.err.println("Input all fields" + e.getMessage());
@@ -129,7 +137,9 @@ public class CustomerController implements Initializable {
     @FXML
     void withdraw(ActionEvent event) {
         try {
+            //get and parse money field
             double money = Double.parseDouble(transactionAmoundTextField.getText());
+            //call withdraw method
             DatabaseHelper.withdraw(DataSingleton.getInstance().getCurrentAccount().getAccountType(), money);
             updateBalance();
         } catch (Exception e) {
@@ -154,7 +164,7 @@ public class CustomerController implements Initializable {
 
         updateLang();
 
-
+        //to set table values
         tranIdTable.setCellValueFactory(new PropertyValueFactory<>("transactionId"));
         accountIdTable.setCellValueFactory(new PropertyValueFactory<>("accountId"));
         tranAmountTable.setCellValueFactory(new PropertyValueFactory<>("tranAmount"));

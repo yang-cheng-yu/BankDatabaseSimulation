@@ -47,6 +47,7 @@ public class ManagerSelectController implements Initializable{
     @FXML
     void viewTransactions(ActionEvent event) {
         try {
+            //load display transaction form
             FXMLLoader loader = new FXMLLoader(getClass().getResource("displayTransactions.fxml"));
             Parent root = loader.load();
 

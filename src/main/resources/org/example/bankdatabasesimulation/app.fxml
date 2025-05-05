@@ -36,13 +36,16 @@
             <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
                <children>
                   <Label fx:id="emailLabel" text="Email: " />
-                  <TextField fx:id="emailBox" />
+                  <TextField fx:id="emailBox" prefHeight="25.0" prefWidth="218.0">
+                     <HBox.margin>
+                        <Insets left="22.0" />
+                     </HBox.margin></TextField>
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
                <children>
                   <Label fx:id="passwordLabel" text="Password: " />
-                  <PasswordField fx:id="passwordBox" />
+                  <PasswordField fx:id="passwordBox" prefHeight="25.0" prefWidth="217.0" />
                </children>
             </HBox>
             <Button fx:id="loginButton" mnemonicParsing="false" onAction="#login" text="Log In" />
